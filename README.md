@@ -1,12 +1,12 @@
 <div align="center">
 
-# Rag at Scale  
+# Rag at Scale
 **Building Blocks for Rapid GenAI Applications**
 
 [🔗 Homepage](https://github.com/solankiharsh) • [📖 Docs](https://github.com/solankiharsh) • [✉️ Contact](mailto:hvsolanki27@gmail.com)
 
-[![License](https://img.shields.io/pypi/l/ragsdk)](https://pypi.org/project/ragsdk)  
-[![Version](https://img.shields.io/pypi/v/ragsdk)](https://pypi.org/project/ragsdk)  
+[![License](https://img.shields.io/pypi/l/ragsdk)](https://pypi.org/project/ragsdk)
+[![Version](https://img.shields.io/pypi/v/ragsdk)](https://pypi.org/project/ragsdk)
 [![Python Versions](https://img.shields.io/pypi/pyversions/ragsdk)](https://pypi.org/project/ragsdk)
 
 </div>
@@ -16,33 +16,33 @@
 ## 🌟 Key Features
 
 ### 1. Core Capabilities
-- **Swap LLMs at will**  
-  Access 100+ hosted models via LiteLLM or run local LLMs seamlessly.  
-- **Type-safe prompts**  
-  Leverage Python generics to enforce input/output schemas on all LLM calls.  
-- **Modular vector stores**  
-  Plug in Qdrant, PgVector, or any other store via the unified API.  
-- **CLI developer tools**  
+- **Swap LLMs at will**
+  Access 100+ hosted models via LiteLLM or run local LLMs seamlessly.
+- **Type-safe prompts**
+  Leverage Python generics to enforce input/output schemas on all LLM calls.
+- **Modular vector stores**
+  Plug in Qdrant, PgVector, or any other store via the unified API.
+- **CLI developer tools**
   Manage stores, inspect pipelines, and test prompts right from your terminal.
 
 ### 2. Fast & Flexible RAG
-- **20+ ingestion formats**  
-  PDFs, HTML, spreadsheets, PPTs—and more via Docling or Unstructured.  
-- **Structured data handling**  
-  Tables, images, and layouts extracted with built-in VLM support.  
-- **Universal connectors**  
-  S3, GCS, Azure, or roll your own data source integration.  
-- **Scalable pipelines**  
+- **20+ ingestion formats**
+  PDFs, HTML, spreadsheets, PPTs—and more via Docling or Unstructured.
+- **Structured data handling**
+  Tables, images, and layouts extracted with built-in VLM support.
+- **Universal connectors**
+  S3, GCS, Azure, or roll your own data source integration.
+- **Scalable pipelines**
   Ray-powered parallel ingestion for massive datasets.
 
 ### 3. Reliable Deployment & Monitoring
-- **Real-time observability**  
-  Integrated OpenTelemetry metrics and CLI dashboards.  
-- **Automated testing**  
-  Pre-deploy prompt validation with Promptfoo.  
-- **Continuous optimization**  
-  Auto-evaluate and refine model performance over time.  
-- **Chat UI boilerplate**  
+- **Real-time observability**
+  Integrated OpenTelemetry metrics and CLI dashboards.
+- **Automated testing**
+  Pre-deploy prompt validation with Promptfoo.
+- **Continuous optimization**
+  Auto-evaluate and refine model performance over time.
+- **Chat UI boilerplate**
   Out-of-the-box chatbot interface with persistence and feedback loops.
 
 ---

@@ -1,10 +1,10 @@
 import os
 from unittest.mock import AsyncMock, patch
 
-from pydantic import BaseModel
+from pydantic import BaseModel  # type: ignore
 
-from ragsdk.guardrails.base import GuardrailManager, GuardrailVerificationResult
-from ragsdk.guardrails.openai_moderation import OpenAIModerationGuardrail
+from ragsdk.guardrails.base import GuardrailManager, GuardrailVerificationResult  # type: ignore
+from ragsdk.guardrails.openai_moderation import OpenAIModerationGuardrail  # type: ignore
 
 
 class MockedModeration(BaseModel):
