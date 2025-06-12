@@ -1,7 +1,7 @@
 from collections import defaultdict
 from collections.abc import Sequence
 
-from ragsdk.core.audit.traces import traceable
+from ragsdk.core.audit.traces import traceable  # type: ignore
 from ragsdk.document_search.documents.element import Element
 from ragsdk.document_search.retrieval.rerankers.base import Reranker, RerankerOptions
 

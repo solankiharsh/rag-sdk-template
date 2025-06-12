@@ -3,8 +3,8 @@ from itertools import chain
 
 import litellm
 
-from ragsdk.core.audit.traces import traceable
-from ragsdk.core.types import NOT_GIVEN, NotGiven
+from ragsdk.core.audit.traces import traceable  # type: ignore
+from ragsdk.core.types import NOT_GIVEN, NotGiven  # type: ignore
 from ragsdk.document_search.documents.element import Element
 from ragsdk.document_search.retrieval.rerankers.base import Reranker, RerankerOptions
 
@@ -25,7 +25,8 @@ class LiteLLMRerankerOptions(RerankerOptions):
 
 class LiteLLMReranker(Reranker[LiteLLMRerankerOptions]):
     """
-    A [LiteLLM](https://docs.litellm.ai/docs/rerank) reranker for providers such as Cohere, Together AI, Azure AI.
+    A [LiteLLM](https://docs.litellm.ai/docs/rerank) reranker for providers such as
+    Cohere, Together AI, Azure AI.
     """
 
     options_cls: type[LiteLLMRerankerOptions] = LiteLLMRerankerOptions
@@ -77,7 +78,8 @@ class LiteLLMReranker(Reranker[LiteLLMRerankerOptions]):
 
         results = []
         for result in response.results:
-            if not merged_options.score_threshold or result["relevance_score"] >= merged_options.score_threshold:
+            if (not merged_options.score_threshold or
+                result["relevance_score"] >= merged_options.score_threshold):
                 if merged_options.override_score:
                     flat_elements[result["index"]].score = result["relevance_score"]
                 results.append(flat_elements[result["index"]])

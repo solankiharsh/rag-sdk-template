@@ -1,14 +1,17 @@
 from collections.abc import Iterable
 from typing import Generic
 
-from pydantic import BaseModel
-from typing_extensions import Self
+from pydantic import BaseModel  # type: ignore
+from typing_extensions import Self  # type: ignore
 
-from ragsdk.core.audit.traces import traceable
-from ragsdk.core.llms.base import LLM, LLMClientOptionsT
-from ragsdk.core.prompt import Prompt
-from ragsdk.core.types import NOT_GIVEN, NotGiven
-from ragsdk.core.utils.config_handling import ObjectConstructionConfig, import_by_path
+from ragsdk.core.audit.traces import traceable  # type: ignore
+from ragsdk.core.llms.base import LLM, LLMClientOptionsT  # type: ignore
+from ragsdk.core.prompt import Prompt  # type: ignore
+from ragsdk.core.types import NOT_GIVEN, NotGiven  # type: ignore
+from ragsdk.core.utils.config_handling import (  # type: ignore
+    ObjectConstructionConfig,
+    import_by_path,
+)
 from ragsdk.document_search.retrieval.rephrasers.base import QueryRephraser, QueryRephraserOptions
 
 
@@ -29,12 +32,14 @@ class LLMQueryRephraserPrompt(Prompt[LLMQueryRephraserPromptInput, list]):
     system_prompt = """
         You are an expert in query rephrasing and clarity improvement.
         {%- if n and n > 1 %}
-        Your task is to generate {{ n }} different versions of the given user query to retrieve relevant documents
-        from a vector database. They can be phrased as statements, as they will be used as a search query.
-        By generating multiple perspectives on the user query, your goal is to help the user overcome some of the
+        Your task is to generate {{ n }} different versions of the given user query
+        to retrieve relevant documents from a vector database. They can be phrased as statements,
+        as they will be used as a search query.
+        By generating multiple perspectives on the user query, your goal is to help the user
+        overcome some of the
         limitations of the distance-based similarity search.
-        Alternative queries should only contain information present in the original query. Do not include anything
-        in the alternative query, you have not seen in the original version.
+        Alternative queries should only contain information present in the original query.
+        Do not include anything in the alternative query, you have not seen in the original version.
         It is VERY important you DO NOT ADD any comments or notes. Return ONLY alternative queries.
         Provide these alternative queries separated by newlines. DO NOT ADD any enumeration.
         {%- else %}
@@ -48,17 +53,22 @@ class LLMQueryRephraserPrompt(Prompt[LLMQueryRephraserPromptInput, list]):
 
     @staticmethod
     def _response_parser(value: str) -> list[str]:
-        return [stripped_line for line in value.strip().split("\n") if (stripped_line := line.strip())]
+        return [
+            stripped_line
+            for line in value.strip().split("\n")
+            if (stripped_line := line.strip())
+        ]
 
     response_parser = _response_parser
 
 
-class LLMQueryRephraserOptions(QueryRephraserOptions, Generic[LLMClientOptionsT]):
+class LLMQueryRephraserOptions(QueryRephraserOptions, Generic[LLMClientOptionsT]): # type: ignore
     """
     Object representing the options for the LLM query rephraser.
 
     Attributes:
-        n: The number of rephrasings to generate. Any number below 2 will generate only one rephrasing.
+        n: The number of rephrasings to generate. Any number below 2 will
+           generate only one rephrasing.
         llm_options: The options for the LLM.
     """
 
@@ -132,7 +142,9 @@ class LLMQueryRephraser(QueryRephraser[LLMQueryRephraserOptions[LLMClientOptions
            ValidationError: If the LLM or prompt configuration doesn't follow the expected format.
            InvalidConfigError: If an LLM or prompt class can't be found or is not the correct type.
         """
-        config["llm"] = LLM.subclass_from_config(ObjectConstructionConfig.model_validate(config["llm"]))
+        config["llm"] = LLM.subclass_from_config(
+            ObjectConstructionConfig.model_validate(config["llm"])
+        )
         config["prompt"] = (
             import_by_path(ObjectConstructionConfig.model_validate(config["prompt"]).type)
             if "prompt" in config

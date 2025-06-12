@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from typing import ClassVar, TypeVar
 
-from ragsdk.core.options import Options
-from ragsdk.core.types import NOT_GIVEN, NotGiven
-from ragsdk.core.utils.config_handling import ConfigurableComponent
+from ragsdk.core.options import Options  # type: ignore
+from ragsdk.core.types import NOT_GIVEN, NotGiven  # type: ignore
+from ragsdk.core.utils.config_handling import ConfigurableComponent  # type: ignore
 from ragsdk.document_search.documents.element import Element
 from ragsdk.document_search.retrieval import rerankers
 
