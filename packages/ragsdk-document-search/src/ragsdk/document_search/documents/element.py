@@ -3,10 +3,10 @@ import uuid
 from abc import ABC, abstractmethod
 from typing import Any, ClassVar
 
-from pydantic import BaseModel, computed_field
+from pydantic import BaseModel, computed_field  # type: ignore
 
-from ragsdk.core.utils.pydantic import SerializableBytes
-from ragsdk.core.vector_stores.base import VectorStoreEntry
+from ragsdk.core.utils.pydantic import SerializableBytes  # type: ignore
+from ragsdk.core.vector_stores.base import VectorStoreEntry  # type: ignore
 from ragsdk.document_search.documents.document import DocumentMeta
 
 
@@ -98,7 +98,9 @@ class Element(BaseModel, ABC):
         Element._elements_registry[element_type_default] = cls
 
     @classmethod
-    def from_vector_db_entry(cls, db_entry: VectorStoreEntry, score: float | None = None) -> "Element":
+    def from_vector_db_entry(
+        cls, db_entry: VectorStoreEntry, score: float | None = None
+    ) -> "Element":
         """
         Create an element from a vector database entry.
 
@@ -133,7 +135,10 @@ class Element(BaseModel, ABC):
         metadata["document_meta"]["source"]["id"] = self.document_meta.source.id
 
         return VectorStoreEntry(
-            id=vector_store_entry_id, text=self.key, image_bytes=self.image_representation, metadata=metadata
+            id=vector_store_entry_id,
+            text=self.key,
+            image_bytes=self.image_representation,
+            metadata=metadata
         )
 
 

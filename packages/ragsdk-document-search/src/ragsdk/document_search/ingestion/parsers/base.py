@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from types import ModuleType
 from typing import ClassVar
 
-from ragsdk.core.utils.config_handling import WithConstructionConfig
+# type: ignore
 from ragsdk.document_search.documents.document import Document, DocumentType
 from ragsdk.document_search.documents.element import Element, ImageElement, TextElement
 from ragsdk.document_search.ingestion import parsers

@@ -1,9 +1,9 @@
 from collections.abc import Mapping
 from typing import ClassVar
 
-from typing_extensions import Self
+from typing_extensions import Self  # type: ignore
 
-from ragsdk.core.utils.config_handling import (
+from ragsdk.core.utils.config_handling import (  # type: ignore
     ObjectConstructionConfig,
     WithConstructionConfig,
     import_by_path,
@@ -33,7 +33,8 @@ class ElementEnricherRouter(WithConstructionConfig):
         Initialize the ElementEnricherRouter instance.
 
         Args:
-            enrichers: The mapping of element types and their enrichers. To override default enrichers.
+            enrichers: The mapping of element types and their enrichers.
+                To override default enrichers.
         """
         self._enrichers = {**_DEFAULT_ENRICHERS, **enrichers} if enrichers else _DEFAULT_ENRICHERS
 

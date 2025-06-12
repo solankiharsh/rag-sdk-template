@@ -2,9 +2,9 @@ from pathlib import Path
 
 import pytest
 
-from ragsdk.core.utils.helpers import env_vars_not_set
-from ragsdk.document_search.documents.document import DocumentMeta
-from ragsdk.document_search.ingestion.parsers.unstructured import (
+from ragsdk.core.utils.helpers import env_vars_not_set  # type: ignore
+from ragsdk.document_search.documents.document import DocumentMeta  # type: ignore
+from ragsdk.document_search.ingestion.parsers.unstructured import (  # type: ignore
     UNSTRUCTURED_API_KEY_ENV,
     UNSTRUCTURED_SERVER_URL_ENV,
     UnstructuredDocumentParser,
@@ -38,7 +38,9 @@ from ragsdk.document_search.ingestion.parsers.unstructured import (
             id="TextDocument",
         ),
         pytest.param(
-            DocumentMeta.from_local_path(Path(__file__).parent.parent / "assets" / "md" / "test_file.md"),
+            DocumentMeta.from_local_path(
+                Path(__file__).parent.parent / "assets" / "md" / "test_file.md"
+            ),
             1,
             id="MarkdownDocument",
         ),
@@ -58,7 +60,11 @@ from ragsdk.document_search.ingestion.parsers.unstructured import (
         ),
     ],
 )
-async def test_unstructured_parser(use_api: bool, document_metadata: DocumentMeta, expected_num_elements: int) -> None:
+async def test_unstructured_parser(
+    use_api: bool,
+    document_metadata: DocumentMeta,
+    expected_num_elements: int,
+) -> None:
     document = await document_metadata.fetch()
     parser = UnstructuredDocumentParser(use_api=use_api)
 

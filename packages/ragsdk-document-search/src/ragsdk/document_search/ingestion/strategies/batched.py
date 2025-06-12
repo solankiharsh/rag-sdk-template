@@ -2,9 +2,9 @@ import asyncio
 from collections.abc import Iterable
 from dataclasses import dataclass
 
-from ragsdk.core.sources.base import Source
-from ragsdk.core.utils.helpers import batched
-from ragsdk.core.vector_stores.base import VectorStore
+from ragsdk.core.sources.base import Source  # type: ignore
+from ragsdk.core.utils.helpers import batched  # type: ignore
+from ragsdk.core.vector_stores.base import VectorStore  # type: ignore
 from ragsdk.document_search.documents.document import Document, DocumentMeta
 from ragsdk.document_search.documents.element import Element
 from ragsdk.document_search.ingestion.enrichers.router import ElementEnricherRouter

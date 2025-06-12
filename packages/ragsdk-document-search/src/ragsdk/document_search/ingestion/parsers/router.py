@@ -1,9 +1,12 @@
 from collections.abc import Mapping
 from typing import ClassVar
 
-from typing_extensions import Self
+from typing_extensions import Self  # type: ignore
 
-from ragsdk.core.utils.config_handling import ObjectConstructionConfig, WithConstructionConfig
+from ragsdk.core.utils.config_handling import (  # type: ignore
+    ObjectConstructionConfig,
+    WithConstructionConfig,
+)
 from ragsdk.document_search.documents.document import DocumentType
 from ragsdk.document_search.ingestion.parsers.base import DocumentParser
 from ragsdk.document_search.ingestion.parsers.docling import DoclingDocumentParser

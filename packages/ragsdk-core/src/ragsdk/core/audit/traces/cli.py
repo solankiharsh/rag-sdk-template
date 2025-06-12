@@ -1,12 +1,12 @@
 import time
 from enum import Enum
 
-from rich.console import Group
-from rich.live import Live
-from rich.panel import Panel
-from rich.syntax import Syntax
-from rich.text import Text
-from rich.tree import Tree
+from rich.console import Group  # type: ignore
+from rich.live import Live  # type: ignore
+from rich.panel import Panel  # type: ignore
+from rich.syntax import Syntax  # type: ignore
+from rich.text import Text  # type: ignore
+from rich.tree import Tree  # type: ignore
 
 from ragsdk.core.audit.traces.base import AttributeFormatter, TraceHandler
 
@@ -23,7 +23,8 @@ class SpanStatus(Enum):
 
 class PrintColor(str, Enum):
     """
-    SpanPrintColor represents the color of font for printing the span related information to the console.
+    PrintColor represents the color of font for printing
+    the span related information to the console.
     """
 
     RUNNING_COLOR = "bold blue"

@@ -5,11 +5,11 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from typer.testing import CliRunner
+from typer.testing import CliRunner  # type: ignore
 
-from ragsdk.core.config import CoreConfig, import_modules_from_config
-from ragsdk.core.utils._pyproject import get_config_instance
-from ragsdk.document_search.cli import ds_app, state
+from ragsdk.core.config import CoreConfig, import_modules_from_config  # type: ignore
+from ragsdk.core.utils._pyproject import get_config_instance  # type: ignore
+from ragsdk.document_search.cli import ds_app, state  # type: ignore
 
 projects_dir = Path(__file__).parent.parent / "unit" / "testprojects"
 

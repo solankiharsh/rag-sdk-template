@@ -3,12 +3,12 @@ from pathlib import Path
 
 import pytest
 
-from ragsdk.core.config import CoreConfig
-from ragsdk.core.utils._pyproject import get_config_instance
-from ragsdk.core.utils.config_handling import NoPreferredConfigError
-from ragsdk.core.vector_stores.in_memory import InMemoryVectorStore
-from ragsdk.document_search._main import DocumentSearch
-from ragsdk.document_search.retrieval.rerankers.noop import NoopReranker
+from ragsdk.core.config import CoreConfig  # type: ignore
+from ragsdk.core.utils._pyproject import get_config_instance  # type: ignore
+from ragsdk.core.utils.config_handling import NoPreferredConfigError  # type: ignore
+from ragsdk.core.vector_stores.in_memory import InMemoryVectorStore  # type: ignore
+from ragsdk.document_search._main import DocumentSearch  # type: ignore
+from ragsdk.document_search.retrieval.rerankers.noop import NoopReranker  # type: ignore
 
 projects_dir = Path(__file__).parent / "testprojects"
 
@@ -117,7 +117,8 @@ def test_preferred_subclass_factory_override():
         current_dir=projects_dir / "project_with_instance_factory",
     )
     instance: DocumentSearch = DocumentSearch.preferred_subclass(
-        config, factory_path_override="project_with_instance_factory.factories:create_document_search_instance_825"
+        config,
+        factory_path_override="project_with_instance_factory.factories:create_document_search_instance_825"
     )
     assert isinstance(instance, DocumentSearch)
     assert isinstance(instance.reranker, NoopReranker)
@@ -128,7 +129,8 @@ def test_preferred_subclass_factory_override():
 
 def test_preferred_subclass_factory_no_configuration():
     """
-    Tests that DocumentSearch.preferred_subclass raises NoPreferredConfigError when no configuration is available
+    Tests that DocumentSearch.preferred_subclass raises NoPreferredConfigError
+    when no configuration is available
     """
     config = get_config_instance(
         CoreConfig,

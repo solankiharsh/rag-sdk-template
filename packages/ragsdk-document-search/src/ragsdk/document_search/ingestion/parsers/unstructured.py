@@ -3,8 +3,8 @@ import inspect
 import os
 from io import BytesIO
 
-from PIL import Image
-from typing_extensions import Self
+from PIL import Image  # type: ignore
+from typing_extensions import Self  # type: ignore
 
 try:
     from unstructured import utils
@@ -14,16 +14,20 @@ finally:
     # This is a hack to disable it.
     utils.scarf_analytics = lambda *args: True
 
-from unstructured.chunking.basic import chunk_elements
-from unstructured.documents.elements import Element as UnstructuredElement
-from unstructured.documents.elements import ElementType
-from unstructured.partition.auto import partition
-from unstructured.staging.base import elements_from_dicts
-from unstructured_client import UnstructuredClient
-from unstructured_client.models.operations import PartitionRequestTypedDict
-from unstructured_client.models.shared import FilesTypedDict, PartitionParametersTypedDict, Strategy
+from unstructured.chunking.basic import chunk_elements  # type: ignore
+from unstructured.documents.elements import Element as UnstructuredElement  # type: ignore
+from unstructured.documents.elements import ElementType  # type: ignore
+from unstructured.partition.auto import partition  # type: ignore
+from unstructured.staging.base import elements_from_dicts  # type: ignore
+from unstructured_client import UnstructuredClient  # type: ignore
+from unstructured_client.models.operations import PartitionRequestTypedDict  # type: ignore
+from unstructured_client.models.shared import (  # type: ignore
+    FilesTypedDict,
+    PartitionParametersTypedDict,
+    Strategy,
+)
 
-from ragsdk.core.audit.traces import traceable
+from ragsdk.core.audit.traces import traceable  # type: ignore
 from ragsdk.document_search.documents.document import Document, DocumentType
 from ragsdk.document_search.documents.element import (
     Element,

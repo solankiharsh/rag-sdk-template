@@ -1,10 +1,10 @@
 from uuid import UUID
 
-from pydantic import computed_field
+from pydantic import computed_field  # type: ignore
 
-from ragsdk.core.vector_stores.base import VectorStoreEntry
-from ragsdk.document_search.documents.document import DocumentType
-from ragsdk.document_search.documents.element import Element
+from ragsdk.core.vector_stores.base import VectorStoreEntry  # type: ignore
+from ragsdk.document_search.documents.document import DocumentType  # type: ignore
+from ragsdk.document_search.documents.element import Element  # type: ignore
 
 
 def test_resolving_element_type() -> None:

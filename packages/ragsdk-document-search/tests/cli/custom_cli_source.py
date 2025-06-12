@@ -2,10 +2,10 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import ClassVar
 
-from typing_extensions import Self
+from typing_extensions import Self  # type: ignore
 
-from ragsdk.core.audit.traces import traceable
-from ragsdk.core.sources.base import Source
+from ragsdk.core.audit.traces import traceable  # type: ignore
+from ragsdk.core.sources.base import Source  # type: ignore
 
 
 class CustomCliSource(Source):

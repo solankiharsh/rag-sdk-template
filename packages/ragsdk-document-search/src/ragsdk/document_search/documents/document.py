@@ -3,12 +3,12 @@ from enum import Enum
 from pathlib import Path
 from typing import Annotated, Any
 
-import filetype
-from pydantic import BaseModel
-from typing_extensions import deprecated
+import filetype  # type: ignore
+from pydantic import BaseModel  # type: ignore
+from typing_extensions import deprecated  # type: ignore
 
-from ragsdk.core.sources.base import Source, SourceDiscriminator
-from ragsdk.core.sources.local import LocalFileSource
+from ragsdk.core.sources.base import Source, SourceDiscriminator  # type: ignore
+from ragsdk.core.sources.local import LocalFileSource  # type: ignore
 
 
 class DocumentType(str, Enum):
@@ -69,8 +69,9 @@ class DocumentMeta(BaseModel):
 
     async def fetch(self) -> "Document":
         """
-        This method fetches the document from source (potentially remote) and creates an object to interface with it.
-        Based on the document type, it will return a different object.
+        This method fetches the document from source (potentially remote) and creates
+        an object to interface with it. Based on the document type, it will return
+        a different object.
 
         Returns:
             The document.
@@ -82,7 +83,8 @@ class DocumentMeta(BaseModel):
     @deprecated("Use from_literal() instead")
     def create_text_document_from_literal(cls, content: str) -> "DocumentMeta":
         """
-        Create a text document from a literal content. This method is deprecated, use from_literal() instead.
+        Create a text document from a literal content.
+        This method is deprecated, use from_literal() instead.
 
         Args:
             content: The content of the document.
@@ -148,7 +150,8 @@ class DocumentMeta(BaseModel):
     @staticmethod
     def _infer_document_type(path: Path) -> DocumentType:
         """
-        Infer the document type by checking the file signature. Use the file extension as a fallback.
+        Infer the document type by checking the file signature.
+        Use the file extension as a fallback.
 
         Args:
             path: The path to the file.
