@@ -1,0 +1,7 @@
+[project]
+name = "factory_project"
+
+[tool.ragsdk.core.llm_preference_factories]
+text = "ragsdk.core.llms.factory:simple_litellm_factory"
+vision = "ragsdk.core.llms.factory:simple_litellm_vision_factory"
+structured_output = "ragsdk.core.llms.factory:simple_litellm_vision_factory"

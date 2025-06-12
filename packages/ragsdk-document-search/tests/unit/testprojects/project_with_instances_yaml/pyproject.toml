@@ -1,0 +1,5 @@
+[project]
+name = "project_with_instances_yaml"
+
+[tool.ragsdk.core]
+component_preference_config_path = "instances.yaml"

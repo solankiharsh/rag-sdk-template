@@ -1,0 +1,24 @@
+# config.yml
+
+vector_store:
+  default_module: rag_sdk.core.vector_stores.elasticsearch_store
+  class_name: ElasticsearchVectorStore
+
+  # Elasticsearch connection
+  user: "sample"
+  password: "changeme"
+  host: "http://localhost:9200"  # e.g. "http://localhost:9200"
+
+embedder:
+  type: LiteLLMEmbedder
+  config:
+    api_key: OPENAI_API_KEY
+    model_name: "text-embedding-3-small"
+
+
+  # Default query options
+  default_options:
+    k: 5
+    score_threshold: 0.7
+    where:
+      index: "my_index_name"

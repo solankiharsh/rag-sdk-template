@@ -1,0 +1,10 @@
+[project]
+name = "happy-project"
+
+[tool.ragsdk]
+lorem = "ipsum"
+
+[tool.ragsdk.happy-project]
+foo = "bar"
+is_happy = true
+happiness_level = 100
