@@ -1,5 +1,5 @@
-from ragsdk.core.utils.config_handling import WithConstructionConfig
-from ragsdk.document_search import DocumentSearch
+from ragsdk.core.utils.config_handling import WithConstructionConfig  # type: ignore
+from ragsdk.document_search import DocumentSearch  # type: ignore
 from ragsdk.evaluate.pipelines.base import EvaluationData, EvaluationPipeline, EvaluationResult
 from ragsdk.evaluate.pipelines.document_search import DocumentSearchPipeline
 
@@ -10,7 +10,9 @@ _target_to_evaluation_pipeline: dict[type[WithConstructionConfig], type[Evaluati
 }
 
 
-def get_evaluation_pipeline_for_target(evaluation_target: WithConstructionConfig) -> EvaluationPipeline:
+def get_evaluation_pipeline_for_target(
+    evaluation_target: WithConstructionConfig
+) -> EvaluationPipeline:
     """
     A function instantiating evaluation pipeline for given WithConstructionConfig object
     Args:

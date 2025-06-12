@@ -1,6 +1,6 @@
 from typing import Any
 
-from distilabel.steps import StepInput, StepOutput
+from distilabel.steps import StepInput, StepOutput  # type: ignore
 
 from .base import BaseFilter
 

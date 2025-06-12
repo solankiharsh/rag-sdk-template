@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 
-from ragsdk.core.sources.base import Source
+from ragsdk.core.sources.base import Source  # type: ignore
 from ragsdk.evaluate.dataloaders.base import DataLoader
 from ragsdk.evaluate.pipelines.document_search import DocumentSearchData
 
@@ -30,9 +30,11 @@ class DocumentSearchDataLoader(DataLoader[DocumentSearchData]):
             split: The split to load the data from. Split is fixed for data loaders to "data",
                 but you can slice it using the [Hugging Face API](https://huggingface.co/docs/datasets/v1.11.0/splits.html#slicing-api).
             question_key: The dataset column name that contains the question.
-            document_ids_key: The dataset column name that contains the document ids. Document ids are optional.
+            document_ids_key: The dataset column name that contains the document ids.
+                Document ids are optional.
             passages_key: The dataset column name that contains the passages. Passages are optional.
-            page_numbers_key: The dataset column name that contains the page numbers. Page numbers are optional.
+            page_numbers_key: The dataset column name that contains the page numbers.
+                Page numbers are optional.
         """
         super().__init__(source=source, split=split, required_keys={question_key})
         self.question_key = question_key

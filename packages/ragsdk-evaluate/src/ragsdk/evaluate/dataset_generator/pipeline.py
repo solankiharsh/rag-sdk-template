@@ -1,13 +1,13 @@
 import sys
 from typing import Any
 
-from datasets import Dataset
-from distilabel.pipeline import Pipeline
-from distilabel.steps.base import Step
-from omegaconf import DictConfig, OmegaConf
-from pydantic import BaseModel
+from datasets import Dataset  # type: ignore
+from distilabel.pipeline import Pipeline  # type: ignore
+from distilabel.steps.base import Step  # type: ignore
+from omegaconf import DictConfig, OmegaConf  # type: ignore
+from pydantic import BaseModel  # type: ignore
 
-from ragsdk.core.utils.config_handling import import_by_path
+from ragsdk.core.utils.config_handling import import_by_path  # type: ignore
 
 module = sys.modules[__name__]
 
@@ -59,13 +59,15 @@ class DatasetGenerationPipelineConfig(BaseModel):
     @classmethod
     def from_dict_config(cls, dict_config: DictConfig) -> "DatasetGenerationPipelineConfig":
         """
-        Creates an instance of `DatasetGenerationPipelineConfig` from a dictionary-based configuration.
+        Creates an instance of `DatasetGenerationPipelineConfig` from a
+        dictionary-based configuration.
 
         Args:
             dict_config (DictConfig): A configuration object containing pipeline details.
 
         Returns:
-            DatasetGenerationPipelineConfig: An instance populated with data from the given configuration.
+            DatasetGenerationPipelineConfig: An instance populated with data
+            from the given configuration.
 
         """
         name = dict_config.name

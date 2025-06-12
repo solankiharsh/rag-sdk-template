@@ -19,7 +19,10 @@ class DataLoaderIncorrectFormatDataError(DataLoaderError):
 
     def __init__(self, required_features: list[str], data_path: Path) -> None:
         super().__init__(
-            message=f"Dataset {data_path} is incorrectly formatted. Required features: {required_features}",
+            message=(
+                f"Dataset {data_path} is incorrectly formatted. "
+                f"Required features: {required_features}"
+            ),
             data_path=data_path,
         )
         self.required_features = required_features

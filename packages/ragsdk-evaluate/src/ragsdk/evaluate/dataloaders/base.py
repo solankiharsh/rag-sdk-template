@@ -3,12 +3,15 @@ from collections.abc import Iterable
 from types import ModuleType
 from typing import ClassVar, Generic
 
-from datasets import load_dataset
-from pydantic import BaseModel
-from typing_extensions import Self
+from datasets import load_dataset  # type: ignore
+from pydantic import BaseModel  # type: ignore
+from typing_extensions import Self  # type: ignore
 
-from ragsdk.core.sources.base import Source
-from ragsdk.core.utils.config_handling import ObjectConstructionConfig, WithConstructionConfig
+from ragsdk.core.sources.base import Source  # type: ignore
+from ragsdk.core.utils.config_handling import (  # type: ignore
+    ObjectConstructionConfig,
+    WithConstructionConfig,
+)
 from ragsdk.evaluate import dataloaders
 from ragsdk.evaluate.dataloaders.exceptions import DataLoaderIncorrectFormatDataError
 from ragsdk.evaluate.pipelines.base import EvaluationDataT
@@ -30,7 +33,9 @@ class DataLoader(WithConstructionConfig, Generic[EvaluationDataT], ABC):
     default_module: ClassVar[ModuleType | None] = dataloaders
     configuration_key: ClassVar[str] = "dataloader"
 
-    def __init__(self, source: Source, *, split: str = "data", required_keys: set[str] | None = None) -> None:
+    def __init__(
+        self, source: Source, *, split: str = "data", required_keys: set[str] | None = None
+    ) -> None:
         """
         Initialize the data loader.
 

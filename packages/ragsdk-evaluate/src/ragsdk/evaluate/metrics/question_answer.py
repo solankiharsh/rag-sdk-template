@@ -3,19 +3,19 @@ from abc import ABC, abstractmethod
 from itertools import chain
 from typing import Generic, TypeVar
 
-from continuous_eval.llm_factory import LLMInterface
-from continuous_eval.metrics.base import LLMBasedMetric
-from continuous_eval.metrics.generation.text import (
+from continuous_eval.llm_factory import LLMInterface  # type: ignore
+from continuous_eval.metrics.base import LLMBasedMetric  # type: ignore
+from continuous_eval.metrics.generation.text import (  # type: ignore
     LLMBasedAnswerCorrectness,
     LLMBasedAnswerRelevance,
     LLMBasedFaithfulness,
     LLMBasedStyleConsistency,
 )
-from typing_extensions import Self
+from typing_extensions import Self  # type: ignore
 
-from ragsdk.agents.types import QuestionAnswerPromptOutputT
-from ragsdk.core.llms.base import LLM
-from ragsdk.core.utils.helpers import batched
+from ragsdk.agents.types import QuestionAnswerPromptOutputT  # type: ignore
+from ragsdk.core.llms.base import LLM  # type: ignore
+from ragsdk.core.utils.helpers import batched  # type: ignore
 from ragsdk.evaluate.metrics.base import Metric
 from ragsdk.evaluate.pipelines.question_answer import QuestionAnswerResult
 
@@ -79,7 +79,9 @@ class QuestionAnswerMetric(Generic[MetricT], Metric[QuestionAnswerResult], ABC):
         config["weight"] = config.get("weight", 1.0)
         return super().from_config(config)
 
-    async def compute(self, results: list[QuestionAnswerResult[QuestionAnswerPromptOutputT]]) -> dict:
+    async def compute(
+        self, results: list[QuestionAnswerResult[QuestionAnswerPromptOutputT]]
+    ) -> dict:
         """
         Compute the metric.
 
@@ -91,7 +93,10 @@ class QuestionAnswerMetric(Generic[MetricT], Metric[QuestionAnswerResult], ABC):
         """
         metric_results = chain.from_iterable(
             [
-                await asyncio.gather(*[asyncio.to_thread(self._call_metric, result) for result in batch])
+                await asyncio.gather(*[
+                    asyncio.to_thread(self._call_metric, result)
+                    for result in batch
+                ])
                 for batch in batched(results, self.batch_size)
             ]
         )

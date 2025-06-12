@@ -2,12 +2,12 @@ import asyncio
 import sys
 from copy import deepcopy
 
-from distilabel.steps import StepInput, StepOutput
-from distilabel.steps.base import Step
+from distilabel.steps import StepInput, StepOutput  # type: ignore
+from distilabel.steps.base import Step  # type: ignore
 
-from ragsdk.core.llms.base import LLM
-from ragsdk.core.prompt import Prompt
-from ragsdk.core.utils.config_handling import import_by_path
+from ragsdk.core.llms.base import LLM  # type: ignore
+from ragsdk.core.prompt import Prompt  # type: ignore
+from ragsdk.core.utils.config_handling import import_by_path  # type: ignore
 
 module = sys.modules[__name__]
 
@@ -23,7 +23,8 @@ class CorpusGenerationStep(Step):
     ):
         super().__init__()
         self._llm = llm
-        self._prompt_class = import_by_path(prompt_class, module) if isinstance(prompt_class, str) else prompt_class
+        self._prompt_class = (import_by_path(prompt_class, module)
+                             if isinstance(prompt_class, str) else prompt_class)
         self._num_per_topic = num_per_topic
 
     @property

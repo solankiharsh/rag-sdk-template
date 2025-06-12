@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from types import ModuleType
 from typing import ClassVar, Generic, TypeVar
 
-from pydantic import BaseModel
+from pydantic import BaseModel  # type: ignore
 
-from ragsdk.core.utils.config_handling import WithConstructionConfig
+from ragsdk.core.utils.config_handling import WithConstructionConfig  # type: ignore
 from ragsdk.evaluate import pipelines
 
 EvaluationDataT = TypeVar("EvaluationDataT", bound="EvaluationData")
@@ -27,7 +27,11 @@ class EvaluationResult(ABC):
     """
 
 
-class EvaluationPipeline(WithConstructionConfig, Generic[EvaluationTargetT, EvaluationDataT, EvaluationResultT], ABC):
+class EvaluationPipeline(
+    WithConstructionConfig,
+    Generic[EvaluationTargetT, EvaluationDataT, EvaluationResultT],
+    ABC
+):
     """
     Evaluation pipeline.
     """

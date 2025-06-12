@@ -2,11 +2,11 @@ import sys
 from abc import ABC, abstractmethod
 from typing import Any
 
-from distilabel.llms.base import LLM
-from distilabel.steps.tasks import TextGeneration
+from distilabel.llms.base import LLM  # type: ignore
+from distilabel.steps.tasks import TextGeneration  # type: ignore
 
-from ragsdk.core.prompt import ChatFormat, Prompt
-from ragsdk.core.utils.config_handling import import_by_path
+from ragsdk.core.prompt import ChatFormat, Prompt  # type: ignore
+from ragsdk.core.utils.config_handling import import_by_path  # type: ignore
 
 module = sys.modules[__name__]
 
@@ -14,11 +14,18 @@ module = sys.modules[__name__]
 class BaseDistilabelTask(TextGeneration, ABC):
     """Base class for distilabel TextGeneration tasks"""
 
-    def __init__(self, llm: LLM, inputs: list[str], outputs: list[str], prompt_class: str | type[Prompt]):
+    def __init__(
+        self,
+        llm: LLM,
+        inputs: list[str],
+        outputs: list[str],
+        prompt_class: str | type[Prompt],
+    ):
         super().__init__(llm=llm)
         self._inputs = inputs
         self._outputs = outputs
-        self._prompt_class = import_by_path(prompt_class, module) if isinstance(prompt_class, str) else prompt_class
+        self._prompt_class = (import_by_path(prompt_class, module)
+                              if isinstance(prompt_class, str) else prompt_class)
 
     @property
     def inputs(self) -> list[str]:
@@ -52,7 +59,9 @@ class BaseDistilabelTask(TextGeneration, ABC):
         return chat
 
     @abstractmethod
-    def format_output(self, output: str, input: dict[str, Any] | None = None) -> dict[str, str | list[str]]:
+    def format_output(
+        self, output: str, input: dict[str, Any] | None = None
+    ) -> dict[str, str | list[str]]:
         """
         Formats the generated question into a structured dictionary with the original "chunk" input.
 

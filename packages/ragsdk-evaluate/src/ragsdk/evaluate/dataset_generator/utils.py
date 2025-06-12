@@ -36,7 +36,10 @@ def get_passages_list(raw_passages: str) -> list[str]:
         try:
             return json.loads("[" + passages_content + "]")
         except (SyntaxError, ValueError):
-            warnings.warn("Unable to evaluate the passages content. Check the format.", category=UserWarning)
+            warnings.warn(
+                "Unable to evaluate the passages content. Check the format.",
+                category=UserWarning
+            )
             return []
     else:
         warnings.warn(message="No brackets found in the input string.", category=UserWarning)

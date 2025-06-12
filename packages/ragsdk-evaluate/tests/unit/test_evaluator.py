@@ -4,13 +4,20 @@ from typing import Any, cast
 from unittest.mock import Mock
 
 import pytest
-from typing_extensions import Self
+from typing_extensions import Self  # type: ignore
 
-from ragsdk.core.utils.config_handling import ObjectConstructionConfig, WithConstructionConfig
-from ragsdk.evaluate.dataloaders.base import DataLoader
-from ragsdk.evaluate.evaluator import Evaluator
-from ragsdk.evaluate.metrics.base import Metric, MetricSet
-from ragsdk.evaluate.pipelines.base import EvaluationData, EvaluationPipeline, EvaluationResult
+from ragsdk.core.utils.config_handling import (  # type: ignore
+    ObjectConstructionConfig,
+    WithConstructionConfig,
+)
+from ragsdk.evaluate.dataloaders.base import DataLoader  # type: ignore
+from ragsdk.evaluate.evaluator import Evaluator  # type: ignore
+from ragsdk.evaluate.metrics.base import Metric, MetricSet  # type: ignore
+from ragsdk.evaluate.pipelines.base import (  # type: ignore
+    EvaluationData,
+    EvaluationPipeline,
+    EvaluationResult,
+)
 
 
 @dataclass
@@ -30,7 +37,9 @@ class MockEvaluationTarget(WithConstructionConfig):
         self.model_name = model_name
 
 
-class MockEvaluationPipeline(EvaluationPipeline[MockEvaluationTarget, MockEvaluationData, MockEvaluationResult]):
+class MockEvaluationPipeline(
+    EvaluationPipeline[MockEvaluationTarget, MockEvaluationData, MockEvaluationResult]
+):
     async def __call__(self, data: Iterable[MockEvaluationData]) -> Iterable[MockEvaluationResult]:
         return [
             MockEvaluationResult(
@@ -47,7 +56,9 @@ class MockEvaluationPipeline(EvaluationPipeline[MockEvaluationTarget, MockEvalua
         return cls(evaluation_target=cast(MockEvaluationTarget, evaluation_target))
 
 
-class MockFailingEvaluationPipeline(EvaluationPipeline[MockEvaluationTarget, MockEvaluationData, MockEvaluationResult]):
+class MockFailingEvaluationPipeline(
+    EvaluationPipeline[MockEvaluationTarget, MockEvaluationData, MockEvaluationResult]
+):
     async def __call__(self, data: Iterable[MockEvaluationData]) -> Iterable[MockEvaluationResult]:
         raise Exception("This is a test exception")
 
@@ -74,12 +85,17 @@ class MockMetric(Metric[MockEvaluationResult]):
         return {"accuracy": accuracy}
 
 
+# Type alias for better readability and line length compliance
+PipelineType = type[
+    EvaluationPipeline[MockEvaluationTarget, MockEvaluationData, MockEvaluationResult]
+]
+
 @pytest.mark.parametrize(
     ("pipeline_type", "expected_results", "expected_errors", "expected_accuracy"),
     [(MockEvaluationPipeline, 4, 0, 0.5), (MockFailingEvaluationPipeline, 0, 1, 0)],
 )
 async def test_run_evaluation(
-    pipeline_type: type[EvaluationPipeline[MockEvaluationTarget, MockEvaluationData, MockEvaluationResult]],
+    pipeline_type: PipelineType,
     expected_results: int,
     expected_errors: int,
     expected_accuracy: float,
@@ -112,12 +128,18 @@ async def test_run_from_config() -> None:
                 "type": f"{__name__}:MockEvaluationPipeline",
                 "config": {
                     "evaluation_target": ObjectConstructionConfig.model_validate(
-                        {"type": f"{__name__}:MockEvaluationTarget", "config": {"model_name": "config_model"}}
+                        {
+                            "type": f"{__name__}:MockEvaluationTarget",
+                            "config": {"model_name": "config_model"}
+                        }
                     )
                 },
             },
             "metrics": {
-                "main_metric": ObjectConstructionConfig.model_validate({"type": f"{__name__}:MockMetric", "config": {}})
+                "main_metric": ObjectConstructionConfig.model_validate({
+                    "type": f"{__name__}:MockMetric",
+                    "config": {}
+                })
             },
         },
     }

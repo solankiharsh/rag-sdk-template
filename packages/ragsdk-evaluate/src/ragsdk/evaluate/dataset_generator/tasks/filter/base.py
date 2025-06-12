@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from distilabel.steps import Step, StepInput, StepOutput
+from distilabel.steps import Step, StepInput, StepOutput  # type: ignore
 
 from ..corpus_generation import CorpusGenerationStep
 from ..text_generation.base import BaseDistilabelTask
