@@ -3,11 +3,11 @@ from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from uuid import uuid4
 
-from typing_extensions import Self
+from typing_extensions import Self  # type: ignore
 
-from ragsdk.core.sources.hf import HuggingFaceSource
-from ragsdk.document_search import DocumentSearch
-from ragsdk.document_search.documents.element import Element
+from ragsdk.core.sources.hf import HuggingFaceSource  # type: ignore
+from ragsdk.document_search import DocumentSearch  # type: ignore
+from ragsdk.document_search.documents.element import Element  # type: ignore
 from ragsdk.evaluate.pipelines.base import EvaluationData, EvaluationPipeline, EvaluationResult
 
 
@@ -35,7 +35,9 @@ class DocumentSearchResult(EvaluationResult):
     reference_page_numbers: list[int] | None = None
 
 
-class DocumentSearchPipeline(EvaluationPipeline[DocumentSearch, DocumentSearchData, DocumentSearchResult]):
+class DocumentSearchPipeline(
+    EvaluationPipeline[DocumentSearch, DocumentSearchData, DocumentSearchResult]
+):
     """
     Document search evaluation pipeline.
     """
@@ -62,7 +64,8 @@ class DocumentSearchPipeline(EvaluationPipeline[DocumentSearch, DocumentSearchDa
         Returns:
             An instance of the pipeline class initialized with the provided configuration.
         """
-        # At this point, we assume that if the source is set, the pipeline is run in experimental mode
+        # At this point, we assume that if the source is set, the pipeline is run
+        # in experimental mode
         # and create random indexes for testing
         # TODO: optimize this for cases with duplicated document search configs between runs
         if config.get("source"):
@@ -93,7 +96,9 @@ class DocumentSearchPipeline(EvaluationPipeline[DocumentSearch, DocumentSearchDa
         Returns:
             The evaluation result batch.
         """
-        results = await asyncio.gather(*[self.evaluation_target.search(row.question) for row in data])
+        results = await asyncio.gather(
+            *[self.evaluation_target.search(row.question) for row in data]
+        )
         return [
             DocumentSearchResult(
                 question=row.question,

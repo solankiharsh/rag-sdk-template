@@ -5,11 +5,14 @@ from collections.abc import Awaitable, Callable, Iterable
 from dataclasses import dataclass
 from typing import Generic, ParamSpec, TypeVar
 
-from pydantic import BaseModel
-from tqdm import tqdm
+from pydantic import BaseModel  # type: ignore
+from tqdm import tqdm  # type: ignore
 
-from ragsdk.core.utils.config_handling import ObjectConstructionConfig, WithConstructionConfig
-from ragsdk.core.utils.helpers import batched
+from ragsdk.core.utils.config_handling import (  # type: ignore
+    ObjectConstructionConfig,
+    WithConstructionConfig,
+)
+from ragsdk.core.utils.helpers import batched  # type: ignore
 from ragsdk.evaluate.dataloaders.base import DataLoader
 from ragsdk.evaluate.metrics.base import MetricSet
 from ragsdk.evaluate.pipelines.base import (
@@ -104,7 +107,9 @@ class Evaluator(WithConstructionConfig):
         """
         evaluator_config = EvaluatorConfig.model_validate(config)
         evaluation_config = EvaluationConfig.model_validate(evaluator_config.evaluation)
-        pipeline: EvaluationPipeline = EvaluationPipeline.subclass_from_config(evaluation_config.pipeline)
+        pipeline: EvaluationPipeline = EvaluationPipeline.subclass_from_config(
+            evaluation_config.pipeline
+        )
         dataloader: DataLoader = DataLoader.subclass_from_config(evaluation_config.dataloader)
         metricset: MetricSet = MetricSet.from_config(evaluation_config.metrics)
 
@@ -168,7 +173,12 @@ class Evaluator(WithConstructionConfig):
         end_time = time.perf_counter()
 
         errors = [output for output in outputs if isinstance(output, Exception)]
-        results = [item for output in outputs if not isinstance(output, Exception) for item in output]
+        results = [
+            item
+            for output in outputs
+            if not isinstance(output, Exception)
+            for item in output
+        ]
 
         return results, errors, self._compute_time_perf(start_time, end_time, len(outputs))
 
@@ -180,7 +190,8 @@ class Evaluator(WithConstructionConfig):
     ) -> _CallReturnT | Exception:
         """
         Call executable with a standarized error handling.
-        If an error occurs, the executable is retried `num_retries` times using randomized exponential backoff.
+        If an error occurs, the executable is retried `num_retries` times using
+        randomized exponential backoff.
 
         Args:
             executable: The callable function to execute.
@@ -206,7 +217,9 @@ class Evaluator(WithConstructionConfig):
         raise RuntimeError("Unreachable code reached")  # mypy quirk
 
     @staticmethod
-    def _compute_time_perf(start_time: float, end_time: float, num_samples: int) -> EvaluationTimePerf:
+    def _compute_time_perf(
+        start_time: float, end_time: float, num_samples: int
+    ) -> EvaluationTimePerf:
         """
         Compute the performance metrics.
 

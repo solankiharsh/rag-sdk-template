@@ -6,13 +6,13 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from datasets import Dataset
-from hydra.core.hydra_config import HydraConfig
-from neptune import Run
-from neptune.types import File
-from neptune.utils import stringify_unsupported
-from neptune_optuna import NeptuneCallback
-from omegaconf import DictConfig
+from datasets import Dataset  # type: ignore
+from hydra.core.hydra_config import HydraConfig  # type: ignore
+from neptune import Run  # type: ignore
+from neptune.types import File  # type: ignore
+from neptune.utils import stringify_unsupported  # type: ignore
+from neptune_optuna import NeptuneCallback  # type: ignore
+from omegaconf import DictConfig  # type: ignore
 
 from ragsdk.evaluate.evaluator import EvaluatorResult
 
@@ -41,7 +41,9 @@ def log_evaluation_to_file(result: EvaluatorResult, output_dir: Path | None = No
             {
                 "type": exc.__class__.__name__,
                 "message": str(exc),
-                "stacktrace": "".join(traceback.format_exception(type(exc), exc, exc.__traceback__)),
+                "stacktrace": "".join(
+                    traceback.format_exception(type(exc), exc, exc.__traceback__)
+                ),
             }
             for exc in result.errors
         ],
@@ -50,7 +52,11 @@ def log_evaluation_to_file(result: EvaluatorResult, output_dir: Path | None = No
     return output_dir
 
 
-def log_evaluation_to_neptune(result: EvaluatorResult, config: DictConfig, tags: str | list[str] | None = None) -> None:
+def log_evaluation_to_neptune(
+    result: EvaluatorResult,
+    config: DictConfig,
+    tags: str | list[str] | None = None
+) -> None:
     """
     Log the evaluation result to Neptune.
 
@@ -64,7 +70,10 @@ def log_evaluation_to_neptune(result: EvaluatorResult, config: DictConfig, tags:
     run["evaluation/metrics"] = stringify_unsupported(result.metrics)
     run["evaluation/time_perf"] = stringify_unsupported(asdict(result.time_perf))
     run["evaluation/results"].upload(
-        File.from_content(json.dumps([asdict(entry) for entry in result.results], indent=4), extension="json")
+        File.from_content(
+            json.dumps([asdict(entry) for entry in result.results], indent=4),
+            extension="json"
+        )
     )
     run["evaluation/errors"].upload(
         File.from_content(
@@ -73,7 +82,9 @@ def log_evaluation_to_neptune(result: EvaluatorResult, config: DictConfig, tags:
                     {
                         "type": exc.__class__.__name__,
                         "message": str(exc),
-                        "stacktrace": "".join(traceback.format_exception(type(exc), exc, exc.__traceback__)),
+                        "stacktrace": "".join(
+                            traceback.format_exception(type(exc), exc, exc.__traceback__)
+                        ),
                     }
                     for exc in result.errors
                 ],

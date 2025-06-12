@@ -4,14 +4,18 @@ from typing import Any
 from unittest.mock import Mock
 
 import pytest
-from pydantic import BaseModel
-from typing_extensions import Self
+from pydantic import BaseModel  # type: ignore
+from typing_extensions import Self  # type: ignore
 
-from ragsdk.core.utils.config_handling import WithConstructionConfig
-from ragsdk.evaluate.dataloaders.base import DataLoader
-from ragsdk.evaluate.metrics.base import Metric, MetricSet
-from ragsdk.evaluate.optimizer import Optimizer
-from ragsdk.evaluate.pipelines.base import EvaluationData, EvaluationPipeline, EvaluationResult
+from ragsdk.core.utils.config_handling import WithConstructionConfig  # type: ignore
+from ragsdk.evaluate.dataloaders.base import DataLoader  # type: ignore
+from ragsdk.evaluate.metrics.base import Metric, MetricSet  # type: ignore
+from ragsdk.evaluate.optimizer import Optimizer  # type: ignore
+from ragsdk.evaluate.pipelines.base import (  # type: ignore
+    EvaluationData,
+    EvaluationPipeline,
+    EvaluationResult,
+)
 
 
 @dataclass
@@ -34,7 +38,9 @@ class MockEvaluationTarget(WithConstructionConfig):
         self.threshold = threshold
 
 
-class MockEvaluationPipeline(EvaluationPipeline[MockEvaluationTarget, MockEvaluationData, MockEvaluationResult]):
+class MockEvaluationPipeline(
+    EvaluationPipeline[MockEvaluationTarget, MockEvaluationData, MockEvaluationResult]
+):
     async def __call__(self, data: Iterable[MockEvaluationData]) -> Iterable[MockEvaluationResult]:
         return [
             MockEvaluationResult(
@@ -108,7 +114,10 @@ def test_optimization_from_config() -> None:
                         "evaluation_target": {"threshold": {"optimize": True, "range": [5, 20]}},
                     },
                 },
-                "dataloader": {"type": f"{__name__}:MockDataLoader", "config": {"dataset_size": 30}},
+                "dataloader": {
+                    "type": f"{__name__}:MockDataLoader",
+                    "config": {"dataset_size": 30}
+                },
                 "metrics": {"test": {"type": f"{__name__}:MockMetric", "config": {}}},
             },
         },

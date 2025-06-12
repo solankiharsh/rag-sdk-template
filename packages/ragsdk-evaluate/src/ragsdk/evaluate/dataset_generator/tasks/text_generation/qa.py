@@ -1,6 +1,6 @@
 from typing import Any
 
-from distilabel.llms.base import LLM
+from distilabel.llms.base import LLM  # type: ignore
 
 from ragsdk.evaluate.dataset_generator.tasks.text_generation.base import BaseDistilabelTask
 from ragsdk.evaluate.dataset_generator.utils import get_closest_substring, get_passages_list
@@ -12,9 +12,16 @@ class QueryGenTask(BaseDistilabelTask):
     """
 
     def __init__(self, llm: LLM, prompt_class: str):
-        super().__init__(llm=llm, inputs=["chunk"], outputs=["question", "chunk"], prompt_class=prompt_class)
+        super().__init__(
+            llm=llm,
+            inputs=["chunk"],
+            outputs=["question", "chunk"],
+            prompt_class=prompt_class
+        )
 
-    def format_output(self, output: str, input: dict[str, Any] | None = None) -> dict[str, str | list[str]]:  # noqa: PLR6301
+    def format_output(  # noqa: PLR6301
+        self, output: str, input: dict[str, Any] | None = None
+    ) -> dict[str, str | list[str]]:  # noqa: PLR6301
         """
         Formats the generated question into a structured dictionary with the original "chunk" input.
 
@@ -43,9 +50,14 @@ class PassagesGenTask(BaseDistilabelTask):
             prompt_class=prompt_class,
         )
 
-    def format_output(self, output: str, input: dict[str, Any] | None = None) -> dict[str, str | list[str]]:
+    def format_output(
+        self,
+        output: str,
+        input: dict[str, Any] | None = None
+    ) -> dict[str, str | list[str]]:
         """
-        Formats the model's output into a structured dictionary with "question", "chunk", and "passages".
+        Formats the model's output into a structured dictionary with "question", "chunk",
+        and "passages".
         If `get_matches` is `True`, attempts to find the closest matches for each passage within the
         provided chunk.
 
@@ -59,30 +71,47 @@ class PassagesGenTask(BaseDistilabelTask):
         passages: list[str] = get_passages_list(output) or []
 
         if self.should_get_matches:
+            if input is None:
+                raise ValueError("Input cannot be None when should_get_matches is True")
+
             matched_passages: list[str] = []
 
             for passage in passages:
-                if passage in input["chunk"]:  # type: ignore
+                if passage in input["chunk"]:
                     matched_passages.append(passage)
                 else:
-                    matched_passage = get_closest_substring(input["chunk"], passage)  # type: ignore
+                    matched_passage = get_closest_substring(input["chunk"], passage)
                     matched_passages.append(matched_passage)
 
-            return {"chunk": input["chunk"], "question": input["question"], "passages": matched_passages}  # type: ignore
+            return {
+                "chunk": input["chunk"],
+                "question": input["question"],
+                "passages": matched_passages
+            }
 
-        return {"chunk": input["chunk"], "question": input["question"], "passages": passages}  # type: ignore
+        if input is None:
+            raise ValueError("Input cannot be None")
+
+        return {"chunk": input["chunk"], "question": input["question"], "passages": passages}
 
 
 class AnswerGenTask(BaseDistilabelTask):
     """
-    A task for generating basic answers to questions based on a provided text chunk. This class extends
-    the `TextGeneration` task from the `distilabel` package.
+    A task for generating basic answers to questions based on a provided text chunk. This class
+    extends the `TextGeneration` task from the `distilabel` package.
     """
 
     def __init__(self, llm: LLM, prompt_class: str):
-        super().__init__(llm=llm, inputs=["chunk", "question"], outputs=["basic_answer"], prompt_class=prompt_class)
+        super().__init__(
+            llm=llm,
+            inputs=["chunk", "question"],
+            outputs=["basic_answer"],
+            prompt_class=prompt_class
+        )
 
-    def format_output(self, output: str, input: dict[str, Any] | None = None) -> dict[str, str | list[str]]:  # noqa: PLR6301
+    def format_output(  # noqa: PLR6301
+        self, output: str, input: dict[str, Any] | None = None
+    ) -> dict[str, str | list[str]]:  # noqa: PLR6301
         """
         Formats the model's output into a structured dictionary with the "basic_answer" key.
 

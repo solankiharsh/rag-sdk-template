@@ -3,11 +3,11 @@ import warnings
 from collections.abc import Callable
 from copy import deepcopy
 
-import optuna
-from optuna import Trial
-from pydantic import BaseModel
+import optuna  # type: ignore
+from optuna import Trial  # type: ignore
+from pydantic import BaseModel  # type: ignore
 
-from ragsdk.core.utils.config_handling import WithConstructionConfig, import_by_path
+from ragsdk.core.utils.config_handling import WithConstructionConfig, import_by_path  # type: ignore
 from ragsdk.evaluate.dataloaders.base import DataLoader
 from ragsdk.evaluate.evaluator import Evaluator, EvaluatorConfig
 from ragsdk.evaluate.metrics.base import MetricSet
@@ -30,7 +30,12 @@ class Optimizer(WithConstructionConfig):
     Optimizer class.
     """
 
-    def __init__(self, direction: str = "maximize", n_trials: int = 10, max_retries_for_trial: int = 1) -> None:
+    def __init__(
+        self,
+        direction: str = "maximize",
+        n_trials: int = 10,
+        max_retries_for_trial: int = 1
+    ) -> None:
         """
         Initialize the pipeline optimizer.
 
@@ -60,7 +65,9 @@ class Optimizer(WithConstructionConfig):
         optimizer_config = OptimizerConfig.model_validate(config)
         evaluator_config = EvaluatorConfig.model_validate(optimizer_config.evaluator)
 
-        dataloader: DataLoader = DataLoader.subclass_from_config(evaluator_config.evaluation.dataloader)
+        dataloader: DataLoader = DataLoader.subclass_from_config(
+            evaluator_config.evaluation.dataloader
+        )
         metricset: MetricSet = MetricSet.from_config(evaluator_config.evaluation.metrics)
 
         pipeline_class = import_by_path(evaluator_config.evaluation.pipeline.type)
@@ -146,7 +153,11 @@ class Optimizer(WithConstructionConfig):
         for attempt in range(1, self.max_retries_for_trial + 1):
             try:
                 config_for_trial = deepcopy(pipeline_config)
-                self._set_values_for_optimized_params(cfg=config_for_trial, trial=trial, ancestors=[])
+                self._set_values_for_optimized_params(
+                    cfg=config_for_trial,
+                    trial=trial,
+                    ancestors=[]
+                )
                 pipeline = pipeline_class.from_config(config_for_trial)
 
                 results = event_loop.run_until_complete(
@@ -173,7 +184,12 @@ class Optimizer(WithConstructionConfig):
 
         return score
 
-    def _set_values_for_optimized_params(self, cfg: dict, trial: Trial, ancestors: list[str]) -> None:  # noqa: PLR0912
+    def _set_values_for_optimized_params(  # noqa: PLR0912
+        self,
+        cfg: dict,
+        trial: Trial,
+        ancestors: list[str]
+    ) -> None:  # noqa: PLR0912
         """
         Recursive method for sampling parameter values for optuna trial.
         """
@@ -190,17 +206,26 @@ class Optimizer(WithConstructionConfig):
                         choices_index = list(range(len(choices)))
                         self._choices_cache[param_id] = choices_index
                     if values_range:
-                        if isinstance(values_range[0], float) and isinstance(values_range[1], float):
-                            cfg[key] = trial.suggest_float(name=param_id, low=values_range[0], high=values_range[1])
+                        if (isinstance(values_range[0], float) and
+                            isinstance(values_range[1], float)):
+                            cfg[key] = trial.suggest_float(
+                                name=param_id,
+                                low=values_range[0],
+                                high=values_range[1]
+                            )
                         elif isinstance(values_range[0], int) and isinstance(values_range[1], int):
-                            cfg[key] = trial.suggest_int(name=param_id, low=values_range[0], high=values_range[1])
+                            cfg[key] = trial.suggest_int(
+                                name=param_id, low=values_range[0], high=values_range[1]
+                            )
                     else:
                         if not choices:
                             raise ValueError("Either choices or range must be specified")
                         choice_idx = trial.suggest_categorical(name=param_id, choices=choices_index)  # type: ignore
                         choice = choices[choice_idx]
                         if isinstance(choice, dict):
-                            self._set_values_for_optimized_params(choice, trial, ancestors + [key, str(choice_idx)])  # type: ignore
+                            self._set_values_for_optimized_params(
+                                choice, trial, ancestors + [key, str(choice_idx)]
+                            )  # type: ignore
                         cfg[key] = choice
                 else:
                     self._set_values_for_optimized_params(value, trial, ancestors + [key])  # type: ignore

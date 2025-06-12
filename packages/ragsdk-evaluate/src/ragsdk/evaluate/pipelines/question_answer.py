@@ -3,15 +3,15 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from typing import Any, Generic
 
-from typing_extensions import Self
+from typing_extensions import Self  # type: ignore
 
-from ragsdk.agents._main import AgentResult
-from ragsdk.agents.types import (
+from ragsdk.agents._main import AgentResult  # type: ignore
+from ragsdk.agents.types import (  # type: ignore
     QuestionAnswerAgent,
     QuestionAnswerPromptInput,
     QuestionAnswerPromptOutputT,
 )
-from ragsdk.core.llms.base import LLMClientOptionsT
+from ragsdk.core.llms.base import LLMClientOptionsT  # type: ignore
 from ragsdk.evaluate.pipelines.base import EvaluationData, EvaluationPipeline, EvaluationResult
 
 
@@ -26,7 +26,7 @@ class QuestionAnswerData(EvaluationData):
 
 
 @dataclass
-class QuestionAnswerResult(EvaluationResult, Generic[QuestionAnswerPromptOutputT]):
+class QuestionAnswerResult(EvaluationResult, Generic[QuestionAnswerPromptOutputT]): # type: ignore
     """
     Represents the result of a single evaluation.
     """
@@ -39,7 +39,11 @@ class QuestionAnswerResult(EvaluationResult, Generic[QuestionAnswerPromptOutputT
 
 class QuestionAnswerPipeline(
     EvaluationPipeline[
-        QuestionAnswerAgent[LLMClientOptionsT, QuestionAnswerPromptInput, QuestionAnswerPromptOutputT],
+        QuestionAnswerAgent[
+            LLMClientOptionsT,
+            QuestionAnswerPromptInput,
+            QuestionAnswerPromptOutputT
+        ],
         QuestionAnswerData,
         QuestionAnswerResult,
     ]

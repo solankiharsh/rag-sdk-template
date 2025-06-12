@@ -1,9 +1,12 @@
 import importlib
 from abc import ABC
 
-from continuous_eval.metrics.retrieval import PrecisionRecallF1, RankedRetrievalMetrics
-from continuous_eval.metrics.retrieval.matching_strategy import MatchingStrategy
-from typing_extensions import Self
+from continuous_eval.metrics.retrieval import (  # type: ignore
+    PrecisionRecallF1,
+    RankedRetrievalMetrics,
+)
+from continuous_eval.metrics.retrieval.matching_strategy import MatchingStrategy  # type: ignore
+from typing_extensions import Self  # type: ignore
 
 from ragsdk.evaluate.metrics.base import Metric
 from ragsdk.evaluate.pipelines.document_search import DocumentSearchResult

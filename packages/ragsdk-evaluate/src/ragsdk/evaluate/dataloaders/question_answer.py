@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 
-from ragsdk.core.sources.base import Source
+from ragsdk.core.sources.base import Source  # type: ignore
 from ragsdk.evaluate.dataloaders.base import DataLoader
 from ragsdk.evaluate.pipelines.question_answer import QuestionAnswerData
 

@@ -3,9 +3,9 @@ from abc import ABC, abstractmethod
 from types import ModuleType
 from typing import ClassVar, Generic
 
-from typing_extensions import Self
+from typing_extensions import Self  # type: ignore
 
-from ragsdk.core.utils.config_handling import WithConstructionConfig
+from ragsdk.core.utils.config_handling import WithConstructionConfig  # type: ignore
 from ragsdk.evaluate import metrics
 from ragsdk.evaluate.pipelines.base import EvaluationResultT
 
@@ -69,7 +69,10 @@ class MetricSet(WithConstructionConfig, Generic[EvaluationResultT]):
         Returns:
             An instance of the metric set class initialized with the provided configuration.
         """
-        return cls(*[Metric.subclass_from_config(metric_config) for metric_config in config.values()])
+        return cls(*[
+            Metric.subclass_from_config(metric_config)
+            for metric_config in config.values()
+        ])
 
     async def compute(self, results: list[EvaluationResultT]) -> dict:
         """

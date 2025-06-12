@@ -3,12 +3,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Annotated
 
-import typer
-from pydantic import BaseModel
+import typer  # type: ignore
+from pydantic import BaseModel  # type: ignore
 
-from ragsdk.cli._utils import get_instance_or_exit
-from ragsdk.cli.state import print_output
-from ragsdk.core.utils.config_handling import WithConstructionConfig
+from ragsdk.cli._utils import get_instance_or_exit  # type: ignore
+from ragsdk.cli.state import print_output  # type: ignore
+from ragsdk.core.utils.config_handling import WithConstructionConfig  # type: ignore
 from ragsdk.evaluate.config import eval_config
 from ragsdk.evaluate.dataloaders import DataLoader
 from ragsdk.evaluate.evaluator import Evaluator
@@ -26,7 +26,11 @@ def register(app: typer.Typer) -> None:
     Args:
         app: The Typer object to register the commands with.
     """
-    app.add_typer(eval_app, name="evaluate", help="Commands for interacting with ragsdk evaluate module")
+    app.add_typer(
+        eval_app,
+        name="evaluate",
+        help="Commands for interacting with ragsdk evaluate module"
+    )
 
 
 @dataclass
@@ -66,7 +70,8 @@ def common_args(
     target_factory_path: Annotated[
         str | None,
         typer.Option(
-            help="A path to a factory of the evaluation target class in format: python.path:function_name",
+            help="A path to a factory of the evaluation target class in format: "
+                 "python.path:function_name",
             exists=True,
             resolve_path=True,
         ),

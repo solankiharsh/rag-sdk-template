@@ -1,6 +1,6 @@
-import numpy as np
+import numpy as np  # type: ignore
 import pytest
-from continuous_eval.metrics.retrieval.matching_strategy import (
+from continuous_eval.metrics.retrieval.matching_strategy import (  # type: ignore
     ExactChunkMatch,
     ExactSentenceMatch,
     MatchingStrategy,
@@ -8,12 +8,12 @@ from continuous_eval.metrics.retrieval.matching_strategy import (
     RougeSentenceMatch,
 )
 
-from ragsdk.core.utils.config_handling import ObjectConstructionConfig
-from ragsdk.document_search.documents.document import DocumentMeta
-from ragsdk.document_search.documents.element import TextElement
-from ragsdk.evaluate.metrics.base import MetricSet
-from ragsdk.evaluate.metrics.document_search import DocumentSearchPrecisionRecallF1
-from ragsdk.evaluate.pipelines.document_search import DocumentSearchResult
+from ragsdk.core.utils.config_handling import ObjectConstructionConfig  # type: ignore
+from ragsdk.document_search.documents.document import DocumentMeta  # type: ignore
+from ragsdk.document_search.documents.element import TextElement  # type: ignore
+from ragsdk.evaluate.metrics.base import MetricSet  # type: ignore
+from ragsdk.evaluate.metrics.document_search import DocumentSearchPrecisionRecallF1  # type: ignore
+from ragsdk.evaluate.pipelines.document_search import DocumentSearchResult  # type: ignore
 
 
 @pytest.fixture(
@@ -34,14 +34,20 @@ def exact_match_results() -> list[DocumentSearchResult]:
         DocumentSearchResult(
             question="Q1",
             predicted_elements=[
-                TextElement(content="The quick brown fox", document_meta=DocumentMeta.from_literal(""))
+                TextElement(
+                    content="The quick brown fox",
+                    document_meta=DocumentMeta.from_literal("")
+                )
             ],
             reference_passages=["The quick brown fox"],
         ),
         DocumentSearchResult(
             question="Q2",
             predicted_elements=[
-                TextElement(content="Lorem ipsum dolor sit amet", document_meta=DocumentMeta.from_literal(""))
+                TextElement(
+                    content="Lorem ipsum dolor sit amet",
+                    document_meta=DocumentMeta.from_literal("")
+                )
             ],
             reference_passages=["Lorem ipsum dolor sit amet"],
         ),
@@ -76,7 +82,10 @@ def no_match_results() -> list[DocumentSearchResult]:
         DocumentSearchResult(
             question="Q1",
             predicted_elements=[
-                TextElement(content="Completely different text", document_meta=DocumentMeta.from_literal("")),
+                TextElement(
+                    content="Completely different text",
+                    document_meta=DocumentMeta.from_literal("")
+                ),
             ],
             reference_passages=["No matching content here"],
         )
@@ -106,7 +115,10 @@ async def test_partial_matches(
     assert 0.0 < results["context_f1"] < 1.0
 
 
-async def test_no_matches(no_match_results: list[DocumentSearchResult], matching_strategy: MatchingStrategy) -> None:
+async def test_no_matches(
+    no_match_results: list[DocumentSearchResult],
+    matching_strategy: MatchingStrategy
+) -> None:
     metric = DocumentSearchPrecisionRecallF1(matching_strategy)
     results = await metric.compute(no_match_results)
 
@@ -129,7 +141,10 @@ async def test_rouge_threshold_behavior() -> None:
         DocumentSearchResult(
             question="Q1",
             predicted_elements=[
-                TextElement(content="The quick brown fox jumps", document_meta=DocumentMeta.from_literal(""))
+                TextElement(
+                    content="The quick brown fox jumps",
+                    document_meta=DocumentMeta.from_literal("")
+                )
             ],
             reference_passages=["The quick brown fox"],
         )
@@ -147,12 +162,19 @@ async def test_mixed_results_with_multiple_queries(matching_strategy: MatchingSt
     results = [
         DocumentSearchResult(
             question="Q1",
-            predicted_elements=[TextElement(content="Exact match", document_meta=DocumentMeta.from_literal(""))],
+            predicted_elements=[
+                TextElement(content="Exact match", document_meta=DocumentMeta.from_literal(""))
+            ],
             reference_passages=["Exact match"],
         ),
         DocumentSearchResult(
             question="Q2",
-            predicted_elements=[TextElement(content="Partial match", document_meta=DocumentMeta.from_literal(""))],
+            predicted_elements=[
+                TextElement(
+                    content="Partial match",
+                    document_meta=DocumentMeta.from_literal("")
+                )
+            ],
             reference_passages=["No at all"],
         ),
     ]
@@ -169,14 +191,20 @@ def test_metric_set_with_different_strategies() -> None:
         "exact_chunk": ObjectConstructionConfig.model_validate(
             {
                 "type": "ragsdk.evaluate.metrics.document_search:DocumentSearchPrecisionRecallF1",
-                "config": {"matching_strategy": {"type": "ExactChunkMatch", "config": {}}, "weight": 0.6},
+                "config": {
+                    "matching_strategy": {"type": "ExactChunkMatch", "config": {}},
+                    "weight": 0.6
+                },
             }
         ),
         "rouge_sentence": ObjectConstructionConfig.model_validate(
             {
                 "type": "ragsdk.evaluate.metrics.document_search:DocumentSearchPrecisionRecallF1",
                 "config": {
-                    "matching_strategy": {"type": "RougeSentenceMatch", "config": {"threshold": 0.6}},
+                    "matching_strategy": {
+                        "type": "RougeSentenceMatch",
+                        "config": {"threshold": 0.6}
+                    },
                     "weight": 0.4,
                 },
             }
@@ -191,7 +219,11 @@ def test_metric_set_with_different_strategies() -> None:
 
 async def test_empty_retrieved_passages() -> None:
     results: list[DocumentSearchResult] = [
-        DocumentSearchResult(question="Q1", predicted_elements=[], reference_passages=["Important content"])
+        DocumentSearchResult(
+            question="Q1",
+            predicted_elements=[],
+            reference_passages=["Important content"]
+        )
     ]
 
     for strategy in [ExactChunkMatch(), RougeSentenceMatch()]:
@@ -205,7 +237,12 @@ async def test_empty_reference_passages() -> None:
     results = [
         DocumentSearchResult(
             question="Q1",
-            predicted_elements=[TextElement(content="Some content", document_meta=DocumentMeta.from_literal(""))],
+            predicted_elements=[
+                TextElement(
+                    content="Some content",
+                    document_meta=DocumentMeta.from_literal("")
+                )
+            ],
             reference_passages=[],
         )
     ]
