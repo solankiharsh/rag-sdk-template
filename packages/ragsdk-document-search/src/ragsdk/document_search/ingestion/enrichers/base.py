@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from types import ModuleType, UnionType
 from typing import ClassVar, Generic, TypeVar, get_args, get_origin
 
-from ragsdk.core.utils.config_handling import WithConstructionConfig
+from ragsdk.core.utils.config_handling import WithConstructionConfig  # type: ignore
 from ragsdk.document_search.documents.element import Element
 from ragsdk.document_search.ingestion import enrichers
 from ragsdk.document_search.ingestion.enrichers.exceptions import EnricherElementNotSupportedError
@@ -12,9 +12,11 @@ ElementT = TypeVar("ElementT", bound=Element)
 
 class ElementEnricher(Generic[ElementT], WithConstructionConfig, ABC):
     """
-    Base class for element enrichers, responsible for providing additional information about elements.
+    Base class for element enrichers,
+    responsible for providing additional information about elements.
 
-    Enrichers operate on raw elements and are used to fill in missing fields that could not be filled in during parsing.
+    Enrichers operate on raw elements and are used to fill in missing fields
+    that could not be filled in during parsing.
     They usually deal with summarizing text or describing images.
     """
 
@@ -61,4 +63,7 @@ class ElementEnricher(Generic[ElementT], WithConstructionConfig, ABC):
         if element_type == expected_element_type:
             return
 
-        raise EnricherElementNotSupportedError(enricher_name=cls.__name__, element_type=element_type)
+        raise EnricherElementNotSupportedError(
+            enricher_name=cls.__name__,
+            element_type=element_type
+        )

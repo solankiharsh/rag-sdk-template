@@ -1,4 +1,4 @@
-from opentelemetry.metrics import Histogram, MeterProvider, get_meter
+from opentelemetry.metrics import Histogram, MeterProvider, get_meter  # type: ignore
 
 from ragsdk.core.audit.metrics.base import MetricHandler
 
@@ -8,7 +8,11 @@ class OtelMetricHandler(MetricHandler[Histogram]):
     OpenTelemetry metric handler.
     """
 
-    def __init__(self, provider: MeterProvider | None = None, metric_prefix: str = "ragsdk") -> None:
+    def __init__(
+        self,
+        provider: MeterProvider | None = None,
+        metric_prefix: str = "ragsdk"
+    ) -> None:
         """
         Initialize the OtelMetricHandler instance.
 

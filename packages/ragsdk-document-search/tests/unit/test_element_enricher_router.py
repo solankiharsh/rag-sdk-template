@@ -1,10 +1,12 @@
 import pytest
 
-from ragsdk.core.utils.config_handling import ObjectConstructionConfig
-from ragsdk.document_search.documents.element import ImageElement, TextElement
-from ragsdk.document_search.ingestion.enrichers.exceptions import EnricherNotFoundError
-from ragsdk.document_search.ingestion.enrichers.image import ImageElementEnricher
-from ragsdk.document_search.ingestion.enrichers.router import ElementEnricherRouter
+from ragsdk.core.utils.config_handling import ObjectConstructionConfig  # type: ignore
+from ragsdk.document_search.documents.element import ImageElement, TextElement  # type: ignore
+from ragsdk.document_search.ingestion.enrichers.exceptions import (
+    EnricherNotFoundError,  # type: ignore
+)
+from ragsdk.document_search.ingestion.enrichers.image import ImageElementEnricher  # type: ignore
+from ragsdk.document_search.ingestion.enrichers.router import ElementEnricherRouter  # type: ignore
 
 
 def test_enricher_router_from_config() -> None:

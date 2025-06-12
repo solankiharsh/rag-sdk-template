@@ -8,18 +8,24 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from ragsdk.core.embeddings.dense import NoopEmbedder
-from ragsdk.core.sources.gcs import GCSSource
-from ragsdk.core.sources.local import LocalFileSource
-from ragsdk.core.vector_stores.base import VectorStoreOptions, VectorStoreResult
-from ragsdk.core.vector_stores.in_memory import InMemoryVectorStore
-from ragsdk.document_search._main import DocumentSearch, DocumentSearchOptions
-from ragsdk.document_search.documents.document import Document, DocumentMeta, DocumentType
-from ragsdk.document_search.documents.element import TextElement
-from ragsdk.document_search.ingestion.parsers import DocumentParser
-from ragsdk.document_search.ingestion.parsers.base import TextDocumentParser
-from ragsdk.document_search.ingestion.parsers.router import DocumentParserRouter
-from ragsdk.document_search.ingestion.strategies.batched import BatchedIngestStrategy
+from ragsdk.core.embeddings.dense import NoopEmbedder  # type: ignore
+from ragsdk.core.sources.gcs import GCSSource  # type: ignore
+from ragsdk.core.sources.local import LocalFileSource  # type: ignore
+from ragsdk.core.vector_stores.base import VectorStoreOptions, VectorStoreResult  # type: ignore
+from ragsdk.core.vector_stores.in_memory import InMemoryVectorStore  # type: ignore
+from ragsdk.document_search._main import DocumentSearch, DocumentSearchOptions  # type: ignore
+from ragsdk.document_search.documents.document import (  # type: ignore
+    Document,
+    DocumentMeta,
+    DocumentType,
+)
+from ragsdk.document_search.documents.element import TextElement  # type: ignore
+from ragsdk.document_search.ingestion.parsers import DocumentParser  # type: ignore
+from ragsdk.document_search.ingestion.parsers.base import TextDocumentParser  # type: ignore
+from ragsdk.document_search.ingestion.parsers.router import DocumentParserRouter  # type: ignore
+from ragsdk.document_search.ingestion.strategies.batched import (
+    BatchedIngestStrategy,  # type: ignore
+)
 
 CONFIG = {
     "vector_store": {
@@ -107,7 +113,8 @@ async def test_document_search_ingest(document: DocumentMeta | Document):
 
 
 async def test_document_search_with_no_results():
-    document_search: DocumentSearch = DocumentSearch(vector_store=InMemoryVectorStore(embedder=AsyncMock()))
+    vector_store = InMemoryVectorStore(embedder=AsyncMock())
+    document_search: DocumentSearch = DocumentSearch(vector_store=vector_store)
 
     results = await document_search.search("Peppa's sister")
 
@@ -124,7 +131,8 @@ async def test_document_search_with_search_config():
     await document_search.ingest([DocumentMeta.from_literal("Name of Peppa's brother is George")])
 
     results = await document_search.search(
-        "Peppa's brother", options=DocumentSearchOptions(vector_store_options=VectorStoreOptions(k=1))
+        "Peppa's brother",
+        options=DocumentSearchOptions(vector_store_options=VectorStoreOptions(k=1))
     )
 
     assert len(results) == 1
@@ -181,7 +189,8 @@ async def test_document_search_ingest_multiple_from_sources():
     document_search: DocumentSearch = DocumentSearch.from_config(CONFIG)
     examples_files = Path(__file__).parent.parent / "assets" / "md"
 
-    await document_search.ingest(await LocalFileSource.list_sources(examples_files, file_pattern="*.md"))
+    sources = await LocalFileSource.list_sources(examples_files, file_pattern="*.md")
+    await document_search.ingest(sources)
 
     results = await document_search.search("foo")
 
@@ -221,7 +230,8 @@ async def test_document_search_with_batched():
     await document_search.ingest(documents)
 
     results = await document_search.search(
-        "Peppa's brother", options=DocumentSearchOptions(vector_store_options=VectorStoreOptions(k=100))
+        "Peppa's brother",
+        options=DocumentSearchOptions(vector_store_options=VectorStoreOptions(k=100))
     )
 
     assert len(await vectore_store.list()) == 12
@@ -277,7 +287,11 @@ async def test_document_search_ingest_from_uri_basic():
     ],
 )
 async def test_document_search_ingest_from_uri_with_wildcard(
-    pattern: str, dir_pattern: str | None, search_query: str, expected_contents: set, expected_filenames: set
+    pattern: str,
+    dir_pattern: str | None,
+    search_query: str,
+    expected_contents: set,
+    expected_filenames: set
 ):
     # Setup temporary directory
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -293,7 +307,11 @@ async def test_document_search_ingest_from_uri_with_wildcard(
         document_search: DocumentSearch = DocumentSearch.from_config(CONFIG)
 
         # Use the parametrized glob pattern
-        dir_pattern = f"{str(Path(temp_dir).parent)}/{dir_pattern}" if dir_pattern is not None else temp_dir
+        dir_pattern = (
+            f"{str(Path(temp_dir).parent)}/{dir_pattern}"
+            if dir_pattern is not None
+            else temp_dir
+        )
         await document_search.ingest(f"local://{dir_pattern}/{pattern}")
 
         # Perform the search
@@ -309,12 +327,19 @@ async def test_document_search_ingest_from_uri_with_wildcard(
 
         # Collect the actual text contents
         contents = {cast(TextElement, result).content for result in results}
-        assert contents == expected_contents, f"Expected contents: {expected_contents}, got: {contents}"
+        assert contents == expected_contents, (
+            f"Expected contents: {expected_contents}, got: {contents}"
+        )
 
         # Verify the sources (file paths) match
-        sources = {str(cast(LocalFileSource, result.document_meta.source).path).split("/")[-1] for result in results}
+        sources = {
+            str(cast(LocalFileSource, result.document_meta.source).path).split("/")[-1]
+            for result in results
+        }
         # We compare only the filenames; if you need full paths, compare the full str(...) instead
-        assert sources == expected_filenames, f"Expected sources: {expected_filenames}, got: {sources}"
+        assert sources == expected_filenames, (
+            f"Expected sources: {expected_filenames}, got: {sources}"
+        )
 
 
 @pytest.mark.asyncio
@@ -356,7 +381,9 @@ async def test_document_search_ingest_from_gcs_uri_basic():
 async def test_document_search_ingest_from_gcs_uri_with_wildcard():
     # Create mock storage client
     storage_mock = mock.AsyncMock()
-    storage_mock.download = mock.AsyncMock(side_effect=[b"GCS test content 1", b"GCS test content 2"])
+    storage_mock.download = mock.AsyncMock(
+        side_effect=[b"GCS test content 1", b"GCS test content 2"]
+    )
     storage_mock.list_objects = mock.AsyncMock(
         return_value={"items": [{"name": "folder/test1.txt"}, {"name": "folder/test2.txt"}]}
     )

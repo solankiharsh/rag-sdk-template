@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from ragsdk.document_search.documents.document import DocumentMeta
-from ragsdk.document_search.ingestion.parsers.docling import DoclingDocumentParser
+from ragsdk.document_search.documents.document import DocumentMeta  # type: ignore
+from ragsdk.document_search.ingestion.parsers.docling import DoclingDocumentParser  # type: ignore
 
 
 @pytest.mark.parametrize(
@@ -15,7 +15,9 @@ from ragsdk.document_search.ingestion.parsers.docling import DoclingDocumentPars
             id="TextDocument",
         ),
         pytest.param(
-            DocumentMeta.from_local_path(Path(__file__).parent.parent / "assets" / "md" / "test_file.md"),
+            DocumentMeta.from_local_path(
+                Path(__file__).parent.parent / "assets" / "md" / "test_file.md"
+            ),
             1,
             id="MarkdownDocument",
         ),

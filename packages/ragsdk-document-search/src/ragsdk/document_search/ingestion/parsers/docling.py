@@ -1,12 +1,12 @@
-from docling.chunking import HierarchicalChunker
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import (
+from docling.chunking import HierarchicalChunker  # type: ignore
+from docling.datamodel.base_models import InputFormat  # type: ignore
+from docling.datamodel.pipeline_options import (  # type: ignore
     AcceleratorOptions,
     EasyOcrOptions,
     PdfPipelineOptions,
     PipelineOptions,
 )
-from docling.document_converter import (
+from docling.document_converter import (  # type: ignore
     DocumentConverter,
     ExcelFormatOption,
     HTMLFormatOption,
@@ -15,7 +15,7 @@ from docling.document_converter import (
     PowerpointFormatOption,
     WordFormatOption,
 )
-from docling_core.types.doc import DocItem, DoclingDocument
+from docling_core.types.doc import DocItem, DoclingDocument  # type: ignore
 
 from ragsdk.document_search.documents.document import Document, DocumentType
 from ragsdk.document_search.documents.element import (

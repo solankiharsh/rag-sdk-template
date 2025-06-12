@@ -1,11 +1,11 @@
-from ragsdk.core.llms.litellm import LiteLLM
-from ragsdk.core.utils.config_handling import ObjectConstructionConfig
-from ragsdk.document_search.retrieval.rephrasers.base import QueryRephraser
-from ragsdk.document_search.retrieval.rephrasers.llm import (
+from ragsdk.core.llms.litellm import LiteLLM  # type: ignore
+from ragsdk.core.utils.config_handling import ObjectConstructionConfig  # type: ignore
+from ragsdk.document_search.retrieval.rephrasers.base import QueryRephraser  # type: ignore
+from ragsdk.document_search.retrieval.rephrasers.llm import (  # type: ignore
     LLMQueryRephraser,
     LLMQueryRephraserPrompt,
 )
-from ragsdk.document_search.retrieval.rephrasers.noop import NoopQueryRephraser
+from ragsdk.document_search.retrieval.rephrasers.noop import NoopQueryRephraser  # type: ignore
 
 
 def test_subclass_from_config():
@@ -49,7 +49,10 @@ def test_subclass_from_config_llm_prompt():
                     "type": "ragsdk.core.llms.litellm:LiteLLM",
                     "config": {"model_name": "some_model"},
                 },
-                "prompt": {"type": "ragsdk.document_search.retrieval.rephrasers.llm:LLMQueryRephraserPrompt"},
+                "prompt": {
+                    "type": "ragsdk.document_search.retrieval.rephrasers.llm:"
+                    "LLMQueryRephraserPrompt"
+                },
                 "default_options": {
                     "n": 4,
                 },

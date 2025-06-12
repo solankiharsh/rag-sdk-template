@@ -2,17 +2,23 @@ from pathlib import Path
 
 import pytest
 
-from ragsdk.core.embeddings.dense import NoopEmbedder
-from ragsdk.core.vector_stores.in_memory import InMemoryVectorStore
-from ragsdk.document_search.documents.document import DocumentMeta, DocumentType
-from ragsdk.document_search.ingestion.enrichers.router import ElementEnricherRouter
-from ragsdk.document_search.ingestion.parsers.base import TextDocumentParser
-from ragsdk.document_search.ingestion.parsers.exceptions import ParserNotFoundError
-from ragsdk.document_search.ingestion.parsers.router import DocumentParserRouter
-from ragsdk.document_search.ingestion.strategies.base import IngestStrategy
-from ragsdk.document_search.ingestion.strategies.batched import BatchedIngestStrategy
-from ragsdk.document_search.ingestion.strategies.ray import RayDistributedIngestStrategy
-from ragsdk.document_search.ingestion.strategies.sequential import SequentialIngestStrategy
+from ragsdk.core.embeddings.dense import NoopEmbedder  # type: ignore
+from ragsdk.core.vector_stores.in_memory import InMemoryVectorStore  # type: ignore
+from ragsdk.document_search.documents.document import DocumentMeta, DocumentType  # type: ignore
+from ragsdk.document_search.ingestion.enrichers.router import ElementEnricherRouter  # type: ignore
+from ragsdk.document_search.ingestion.parsers.base import TextDocumentParser  # type: ignore
+from ragsdk.document_search.ingestion.parsers.exceptions import ParserNotFoundError  # type: ignore
+from ragsdk.document_search.ingestion.parsers.router import DocumentParserRouter  # type: ignore
+from ragsdk.document_search.ingestion.strategies.base import IngestStrategy  # type: ignore
+from ragsdk.document_search.ingestion.strategies.batched import (
+    BatchedIngestStrategy,  # type: ignore
+)
+from ragsdk.document_search.ingestion.strategies.ray import (
+    RayDistributedIngestStrategy,  # type: ignore
+)
+from ragsdk.document_search.ingestion.strategies.sequential import (
+    SequentialIngestStrategy,  # type: ignore
+)
 
 
 @pytest.fixture(
@@ -20,7 +26,12 @@ from ragsdk.document_search.ingestion.strategies.sequential import SequentialIng
     params=[
         SequentialIngestStrategy(num_retries=0),
         BatchedIngestStrategy(batch_size=2, num_retries=0),
-        RayDistributedIngestStrategy(batch_size=1, enrich_batch_size=2, index_batch_size=2, num_retries=0),
+        RayDistributedIngestStrategy(
+            batch_size=1,
+            enrich_batch_size=2,
+            index_batch_size=2,
+            num_retries=0
+        ),
     ],
     ids=["SequentialIngestStrategy", "BatchedIngestStrategy", "RayDistributedIngestStrategy"],
 )
@@ -56,8 +67,12 @@ async def test_ingest_strategy_call_fail(ingest_strategy: IngestStrategy) -> Non
         DocumentMeta.from_literal("Name of Peppa's brother is George"),
         DocumentMeta.from_literal("Name of Peppa's mother is Mummy Pig"),
         DocumentMeta.from_literal("Name of Peppa's father is Daddy Pig"),
-        DocumentMeta.from_local_path(Path(__file__).parent.parent / "assets" / "img" / "transformers_paper_page.png"),
-        DocumentMeta.from_local_path(Path(__file__).parent.parent / "assets" / "pdf" / "transformers_paper_page.pdf"),
+        DocumentMeta.from_local_path(
+            Path(__file__).parent.parent / "assets" / "img" / "transformers_paper_page.png"
+        ),
+        DocumentMeta.from_local_path(
+            Path(__file__).parent.parent / "assets" / "pdf" / "transformers_paper_page.pdf"
+        ),
     ]
     vector_store = InMemoryVectorStore(embedder=NoopEmbedder())
     parser_router = DocumentParserRouter()

@@ -2,12 +2,12 @@ import json
 import sys
 from pathlib import Path
 
-from typer.testing import CliRunner
+from typer.testing import CliRunner  # type: ignore
 
-from ragsdk.cli import app as root_app
-from ragsdk.cli import autoregister
-from ragsdk.cli.state import CliState, cli_state
-from ragsdk.document_search.cli import ds_app
+from ragsdk.cli import app as root_app  # type: ignore
+from ragsdk.cli import autoregister  # type: ignore
+from ragsdk.cli.state import CliState, cli_state  # type: ignore
+from ragsdk.document_search.cli import ds_app  # type: ignore
 
 projects_dir = Path(__file__).parent.parent / "unit" / "testprojects"
 
@@ -15,7 +15,8 @@ projects_dir = Path(__file__).parent.parent / "unit" / "testprojects"
 sys.path.append(str(projects_dir))
 
 # Path to the factory function that creates the test document search instance
-factory_path = "project_with_instance_factory.factories:create_document_search_instance_with_documents"
+factory_path = "project_with_instance_factory.factories:" \
+               "create_document_search_instance_with_documents"
 
 
 def test_no_object():
@@ -58,7 +59,14 @@ def test_search_columns():
     runner = CliRunner(mix_stderr=False)
     result = runner.invoke(
         ds_app,
-        ["--factory-path", factory_path, "search", "example query", "--columns", "document_meta,location"],
+        [
+            "--factory-path",
+            factory_path,
+            "search",
+            "example query",
+            "--columns",
+            "document_meta,location",
+        ],
     )
     assert result.exit_code == 0
     assert "Foo document" not in result.stdout

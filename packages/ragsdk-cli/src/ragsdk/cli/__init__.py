@@ -8,12 +8,12 @@ from typing import Annotated
 # This config disables it.
 os.environ["LITELLM_LOCAL_MODEL_COST_MAP"] = "True"
 
-import click
-import typer
-from typer.main import get_command
+import click  # type: ignore
+import typer  # type: ignore
+from typer.main import get_command  # type: ignore
 
 import ragsdk
-from ragsdk.core.audit.traces import set_trace_handlers
+from ragsdk.core.audit.traces import set_trace_handlers  # type: ignore
 
 from .state import OutputType, cli_state, print_output
 
@@ -30,7 +30,8 @@ _click_app: click.Command | None = None  # initialized in the `init_for_mkdocs` 
 
 @app.callback()
 def ragsdk_cli(
-    # `OutputType.text.value` used as a workaround for the issue with `typer.Option` not accepting Enum values
+    # `OutputType.text.value` used as a workaround for the issue with
+    # `typer.Option` not accepting Enum values
     output: Annotated[
         OutputType, typer.Option("--output", "-o", help="Set the output type (text or json)")
     ] = OutputType.text.value,  # type: ignore
@@ -52,13 +53,15 @@ def autoregister() -> None:
     This function registers all the CLI modules in the ragsdk packages:
         - iterates over every package in the ragsdk.* namespace
         - it looks for `cli` package / module
-        - if found it imports the `register` function from the `cli` module and calls it with the `app` object
+        - if found it imports the `register` function from the `cli` module and calls it with the
+          `app` object
         - register function should add the CLI commands to the `app` object
     """
     cli_enabled_modules = [
         module
         for module in pkgutil.iter_modules(ragsdk.__path__)
-        if module.ispkg and module.name != "cli" and (Path(module.module_finder.path) / module.name / "cli.py").exists()  # type: ignore
+        if module.ispkg and module.name != "cli" and
+        (Path(module.module_finder.path) / module.name / "cli.py").exists()  # type: ignore
     ]
 
     for module in cli_enabled_modules:

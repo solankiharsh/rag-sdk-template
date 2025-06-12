@@ -1,11 +1,16 @@
 import pytest
 
-from ragsdk.core.utils.config_handling import ObjectConstructionConfig
-from ragsdk.document_search.documents.document import DocumentType
-from ragsdk.document_search.ingestion.parsers.base import ImageDocumentParser, TextDocumentParser
-from ragsdk.document_search.ingestion.parsers.exceptions import ParserNotFoundError
-from ragsdk.document_search.ingestion.parsers.router import DocumentParserRouter
-from ragsdk.document_search.ingestion.parsers.unstructured import UnstructuredDocumentParser
+from ragsdk.core.utils.config_handling import ObjectConstructionConfig  # type: ignore
+from ragsdk.document_search.documents.document import DocumentType  # type: ignore
+from ragsdk.document_search.ingestion.parsers.base import (  # type: ignore
+    ImageDocumentParser,
+    TextDocumentParser,
+)
+from ragsdk.document_search.ingestion.parsers.exceptions import ParserNotFoundError  # type: ignore
+from ragsdk.document_search.ingestion.parsers.router import DocumentParserRouter  # type: ignore
+from ragsdk.document_search.ingestion.parsers.unstructured import (
+    UnstructuredDocumentParser,  # type: ignore
+)
 
 
 def test_parser_router_from_config() -> None:
@@ -17,7 +22,8 @@ def test_parser_router_from_config() -> None:
             {"type": "ragsdk.document_search.ingestion.parsers.base:ImageDocumentParser"}
         ),
         "pdf": ObjectConstructionConfig.model_validate(
-            {"type": "ragsdk.document_search.ingestion.parsers.unstructured:UnstructuredDocumentParser"}
+            {"type": ("ragsdk.document_search.ingestion.parsers.unstructured:"
+                      "UnstructuredDocumentParser")}
         ),
     }
     router = DocumentParserRouter.from_config(config)

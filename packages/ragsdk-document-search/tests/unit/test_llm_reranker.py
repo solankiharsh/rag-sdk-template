@@ -4,13 +4,13 @@ from unittest.mock import AsyncMock, Mock
 
 import pytest
 
-from ragsdk.core.llms.base import LLMResponseWithMetadata
-from ragsdk.core.llms.litellm import LiteLLM, LiteLLMOptions
-from ragsdk.core.utils.config_handling import ObjectConstructionConfig
-from ragsdk.document_search.documents.document import DocumentMeta
-from ragsdk.document_search.documents.element import TextElement
-from ragsdk.document_search.retrieval.rerankers.base import Reranker
-from ragsdk.document_search.retrieval.rerankers.llm import (
+from ragsdk.core.llms.base import LLMResponseWithMetadata  # type: ignore
+from ragsdk.core.llms.litellm import LiteLLM, LiteLLMOptions  # type: ignore
+from ragsdk.core.utils.config_handling import ObjectConstructionConfig  # type: ignore
+from ragsdk.document_search.documents.document import DocumentMeta  # type: ignore
+from ragsdk.document_search.documents.element import TextElement  # type: ignore
+from ragsdk.document_search.retrieval.rerankers.base import Reranker  # type: ignore
+from ragsdk.document_search.retrieval.rerankers.llm import (  # type: ignore
     LLMReranker,
     LLMRerankerOptions,
     RerankerPrompt,
@@ -23,9 +23,18 @@ def mock_llm() -> AsyncMock:
     mock.model_name = "gpt-3.5-turbo"
     mock.default_options = LiteLLMOptions()
     mock.generate_with_metadata.side_effect = [
-        LLMResponseWithMetadata(content="Yes", metadata={"logprobs": [{"logprob": math.log(0.9)}]}),  # High relevance
-        LLMResponseWithMetadata(content="No", metadata={"logprobs": [{"logprob": math.log(0.6)}]}),  # Low relevance
-        LLMResponseWithMetadata(content="Yes", metadata={"logprobs": [{"logprob": math.log(0.6)}]}),  # Medium relevance
+        LLMResponseWithMetadata(
+            content="Yes",
+            metadata={"logprobs": [{"logprob": math.log(0.9)}]}
+        ),  # High relevance
+        LLMResponseWithMetadata(
+            content="No",
+            metadata={"logprobs": [{"logprob": math.log(0.6)}]}
+        ),  # Low relevance
+        LLMResponseWithMetadata(
+            content="Yes",
+            metadata={"logprobs": [{"logprob": math.log(0.6)}]}
+        ),  # Medium relevance
     ]
     return mock
 
@@ -35,13 +44,18 @@ def sample_elements() -> Sequence[Sequence[TextElement]]:
     return [
         [
             TextElement(
-                content="This is a relevant document about Python programming", document_meta=Mock(spec=DocumentMeta)
+                content="This is a relevant document about Python programming",
+                document_meta=Mock(spec=DocumentMeta)
             )
         ],
         [
-            TextElement(content="This document is about cooking recipes", document_meta=Mock(spec=DocumentMeta)),
             TextElement(
-                content="Information about Python frameworks and libraries", document_meta=Mock(spec=DocumentMeta)
+                content="This document is about cooking recipes",
+                document_meta=Mock(spec=DocumentMeta)
+            ),
+            TextElement(
+                content="Information about Python frameworks and libraries",
+                document_meta=Mock(spec=DocumentMeta)
             ),
         ],
     ]
@@ -94,7 +108,10 @@ def test_llm_reranker_subclass_from_config() -> None:
     assert reranker.default_options.top_n == 12
 
 
-async def test_llm_reranker_rerank(mock_llm: AsyncMock, sample_elements: Sequence[Sequence[TextElement]]) -> None:
+async def test_llm_reranker_rerank(
+    mock_llm: AsyncMock,
+    sample_elements: Sequence[Sequence[TextElement]]
+) -> None:
     custom_top_n = 2
     custom_options = LLMRerankerOptions(top_n=custom_top_n)
     reranker = LLMReranker(llm=mock_llm)

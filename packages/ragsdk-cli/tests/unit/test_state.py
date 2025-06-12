@@ -2,13 +2,18 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
-import typer
-from pydantic import BaseModel
-from pydantic.fields import Field, FieldInfo
-from rich.table import Column, Table
+import typer  # type: ignore
+from pydantic import BaseModel  # type: ignore
+from pydantic.fields import Field, FieldInfo  # type: ignore
+from rich.table import Column, Table  # type: ignore
 
-from ragsdk.cli.state import OutputType, _get_nested_field, print_output, print_output_table
-from ragsdk.core.sources.local import LocalFileSource
+from ragsdk.cli.state import (  # type: ignore
+    OutputType,
+    _get_nested_field,
+    print_output,
+    print_output_table,
+)
+from ragsdk.core.sources.local import LocalFileSource  # type: ignore
 
 
 class InnerTestModel(BaseModel):
@@ -36,7 +41,11 @@ data = [
         model=OtherTestModel(
             id=11,
             name="aa",
-            location=InnerTestModel(id=111, name="aa1", location=LocalFileSource(path=Path("folder_1"))),
+            location=InnerTestModel(
+                id=111,
+                name="aa1",
+                location=LocalFileSource(path=Path("folder_1"))
+            ),
         ),
     ),
     MainTestModel(
@@ -45,7 +54,11 @@ data = [
         model=OtherTestModel(
             id=22,
             name="bb",
-            location=InnerTestModel(id=222, name="aa2", location=LocalFileSource(path=Path("folder_2"))),
+            location=InnerTestModel(
+                id=222,
+                name="aa2",
+                location=LocalFileSource(path=Path("folder_2"))
+            ),
         ),
     ),
 ]
@@ -81,7 +94,11 @@ def test_print_output_unsupported_output_type():
 
 def test_print_output_table():
     with patch("rich.console.Console.print") as mock_print:
-        columns = {"id": Column(), "model.location.location.path": Column(), "model.location.name": Column()}
+        columns = {
+            "id": Column(),
+            "model.location.location.path": Column(),
+            "model.location.name": Column()
+        }
         print_output_table(data, columns)
         mock_print.assert_called_once()
         args, _ = mock_print.call_args_list[0]
@@ -118,4 +135,6 @@ def test_get_nested_field_wrong_field():
         with patch("rich.console.Console.print") as mock_print:
             with pytest.raises(typer.Exit, match="1"):
                 _get_nested_field(wrong_column, fields)
-            mock_print.assert_called_once_with(f"Unknown column: {wrong_column} ({wrong_fragment} not found)")
+            mock_print.assert_called_once_with(
+                f"Unknown column: {wrong_column} ({wrong_fragment} not found)"
+            )

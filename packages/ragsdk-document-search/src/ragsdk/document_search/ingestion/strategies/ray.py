@@ -1,9 +1,9 @@
 import asyncio
 from collections.abc import Iterable
 
-from ragsdk.core.sources.base import Source
-from ragsdk.core.utils.decorators import requires_dependencies
-from ragsdk.core.vector_stores.base import VectorStore
+from ragsdk.core.sources.base import Source  # type: ignore
+from ragsdk.core.utils.decorators import requires_dependencies  # type: ignore
+from ragsdk.core.vector_stores.base import VectorStore  # type: ignore
 from ragsdk.document_search.documents.document import Document, DocumentMeta
 from ragsdk.document_search.ingestion.enrichers.router import ElementEnricherRouter
 from ragsdk.document_search.ingestion.parsers.router import DocumentParserRouter
@@ -45,7 +45,8 @@ class RayDistributedIngestStrategy(BatchedIngestStrategy):
                 Describes the maximum number of document elements to index at once.
                 If None, all elements are indexed at once.
             parse_memory: The heap memory in bytes to reserve for each parallel parsing tasks.
-            processing_memory: The heap memory in bytes to reserve for each parallel elements processing tasks.
+            processing_memory: The heap memory in bytes to reserve for each parallel
+                elements processing tasks.
             num_retries: The number of retries per document ingest task error.
             backoff_multiplier: The base delay multiplier for exponential backoff (in seconds).
             backoff_max: The maximum allowed delay (in seconds) between retries.
@@ -85,7 +86,9 @@ class RayDistributedIngestStrategy(BatchedIngestStrategy):
 
         # Parse documents
         parse_results = ray.data.from_items(list(documents)).map_batches(
-            fn=lambda batch: {"results": asyncio.run(self._parse_batch(batch["item"], parser_router))},
+            fn=lambda batch: {
+                "results": asyncio.run(self._parse_batch(batch["item"], parser_router))
+            },
             batch_size=self.batch_size,
             num_cpus=1,
             memory=self.parse_memory,
@@ -93,35 +96,53 @@ class RayDistributedIngestStrategy(BatchedIngestStrategy):
         )
 
         # Split documents into successful and failed
-        successfully_parsed = parse_results.filter(lambda data: isinstance(data["results"], IngestTaskResult))
-        failed_parsed = parse_results.filter(lambda data: isinstance(data["results"], IngestDocumentResult))
+        successfully_parsed = parse_results.filter(
+            lambda data: isinstance(data["results"], IngestTaskResult)
+        )
+        failed_parsed = parse_results.filter(
+            lambda data: isinstance(data["results"], IngestDocumentResult)
+        )
 
         # Further split valid documents into to enrich and ready
         to_enrich = successfully_parsed.filter(
-            lambda data: any(type(element) in enricher_router for element in data["results"].elements)
+            lambda data: any(
+                type(element) in enricher_router
+                for element in data["results"].elements
+            )
         )
         ready_parsed = successfully_parsed.filter(
-            lambda data: not any(type(element) in enricher_router for element in data["results"].elements)
+            lambda data: not any(
+                type(element) in enricher_router
+                for element in data["results"].elements
+            )
         )
 
         # Enrich documents
         enrich_results = to_enrich.map_batches(
-            fn=lambda batch: {"results": asyncio.run(self._enrich_batch(batch["results"], enricher_router))},
+            fn=lambda batch: {
+                "results": asyncio.run(self._enrich_batch(batch["results"], enricher_router))
+            },
             batch_size=self.batch_size,
             num_cpus=0,
             memory=self.processing_memory,
         )
 
         # Split enriched documents into successful and failed
-        successfully_enriched = enrich_results.filter(lambda data: isinstance(data["results"], IngestTaskResult))
-        failed_enriched = enrich_results.filter(lambda data: isinstance(data["results"], IngestDocumentResult))
+        successfully_enriched = enrich_results.filter(
+            lambda data: isinstance(data["results"], IngestTaskResult)
+        )
+        failed_enriched = enrich_results.filter(
+            lambda data: isinstance(data["results"], IngestDocumentResult)
+        )
 
         # Combine ready documents with successfully enriched documents for indexing
         to_index = ready_parsed.union(successfully_enriched)
 
         # Index the combined documents
         index_results = to_index.map_batches(
-            fn=lambda batch: {"results": asyncio.run(self._index_batch(batch["results"], vector_store))},
+            fn=lambda batch: {
+                "results": asyncio.run(self._index_batch(batch["results"], vector_store))
+            },
             batch_size=self.batch_size,
             num_cpus=0,
             memory=self.processing_memory,

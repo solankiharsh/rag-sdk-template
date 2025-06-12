@@ -122,11 +122,16 @@ class AttributeFormatter:
         self.data = data
         self.prefix = prefix
         self.flattened: dict[
-            str, str | float | int | bool | Sequence[str] | Sequence[bool] | Sequence[int] | Sequence[float]
+            str,
+            str | float | int | bool |
+            Sequence[str] | Sequence[bool] | Sequence[int] | Sequence[float]
         ] = {}
 
     def process_attributes(
-        self, attr_dict: dict[str, Any] | None = None, curr_key: str | None = None, recurrence: int = 0
+        self,
+        attr_dict: dict[str, Any] | None = None,
+        curr_key: str | None = None,
+        recurrence: int = 0
     ) -> None:
         """
             Format attributes for CLI
@@ -147,7 +152,8 @@ class AttributeFormatter:
 
     def process_prompt_chat(self, curr_key: str | None, attr_dict: list[dict[str, Any]]) -> None:
         """
-        Process an item which is a prompt in a chat format to obtain user and system prompt for better rendering.
+        Process an item which is a prompt in a chat format to obtain user and system prompt
+        for better rendering.
 
         Args:
             curr_key: The prefix to use for the keys.
@@ -269,7 +275,9 @@ class AttributeFormatter:
             # do not process too long lists.
             if is_too_long:
                 position_key = f"{curr_key}[{self.opt_list_length}:{list_length - 1}]"
-                self.flattened[position_key] = f"...{list_length - self.opt_list_length - 1} more elements..."
+                self.flattened[position_key] = (
+                    f"...{list_length - self.opt_list_length - 1} more elements..."
+                )
                 position_key = f"{curr_key}[{list_length - 1}]"
                 self.process_item(last, position_key, recurrence)
 
@@ -285,10 +293,14 @@ class AttributeFormatter:
         Returns:
             string representation of shortened list.
         """
-        lst = [cls.process_string(item, curr_key) if isinstance(item, str) else item for item in lst]
+        lst = [cls.process_string(item, curr_key)
+            if isinstance(item, str) else item for item in lst]
         list_length = len(lst)
         if list_length > cls.max_list_length:
-            return str(lst[: cls.opt_list_length - 1] + ["..."] + [lst[-1]]) + f"(total {list_length} elements)"
+            return (
+                str(lst[: cls.opt_list_length - 1] + ["..."] + [lst[-1]]) +
+                f"(total {list_length} elements)"
+            )
 
         return str(lst)
 
@@ -313,7 +325,8 @@ class AttributeFormatter:
     @classmethod
     def is_special_key(cls, curr_key: str, key_list: list[str]) -> bool:
         """
-        Check if a key belongs to the prompt keywords list - which means that the string should not be truncated
+        Check if a key belongs to the prompt keywords list - which means that the string
+        should not be truncated
         Args:
             curr_key: The current key in flattened dictionary.
             key_list: The list of keys to check.

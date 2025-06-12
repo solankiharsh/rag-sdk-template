@@ -2,17 +2,22 @@ from argparse import Namespace
 from collections.abc import Sequence
 from unittest.mock import Mock, patch
 
-from ragsdk.core.utils.config_handling import ObjectConstructionConfig
-from ragsdk.document_search.documents.document import DocumentMeta
-from ragsdk.document_search.documents.element import Element, TextElement
-from ragsdk.document_search.retrieval.rerankers.answerai import AnswerAIReranker
-from ragsdk.document_search.retrieval.rerankers.base import Reranker, RerankerOptions
-from ragsdk.document_search.retrieval.rerankers.litellm import (
+from ragsdk.core.utils.config_handling import ObjectConstructionConfig  # type: ignore
+from ragsdk.document_search.documents.document import DocumentMeta  # type: ignore
+from ragsdk.document_search.documents.element import Element, TextElement  # type: ignore
+from ragsdk.document_search.retrieval.rerankers.answerai import AnswerAIReranker  # type: ignore
+from ragsdk.document_search.retrieval.rerankers.base import (  # type: ignore
+    Reranker,
+    RerankerOptions,
+)
+from ragsdk.document_search.retrieval.rerankers.litellm import (  # type: ignore
     LiteLLMReranker,
     LiteLLMRerankerOptions,
 )
-from ragsdk.document_search.retrieval.rerankers.noop import NoopReranker
-from ragsdk.document_search.retrieval.rerankers.rrf import ReciprocalRankFusionReranker
+from ragsdk.document_search.retrieval.rerankers.noop import NoopReranker  # type: ignore
+from ragsdk.document_search.retrieval.rerankers.rrf import (
+    ReciprocalRankFusionReranker,  # type: ignore
+)
 
 
 class CustomReranker(Reranker):
@@ -107,7 +112,8 @@ async def test_litellm_reranker_rerank() -> None:
     query = "Test query"
 
     with patch(
-        "ragsdk.document_search.retrieval.rerankers.litellm.litellm.arerank", return_value=reranker_output
+        "ragsdk.document_search.retrieval.rerankers.litellm.litellm.arerank",
+        return_value=reranker_output
     ) as mock_arerank:
         results = await reranker.rerank(elements, query)
 

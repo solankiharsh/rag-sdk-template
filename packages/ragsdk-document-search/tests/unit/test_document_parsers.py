@@ -10,8 +10,12 @@ from ragsdk.document_search.ingestion.parsers.base import (  # type: ignore
     ImageDocumentParser,
     TextDocumentParser,
 )
-from ragsdk.document_search.ingestion.parsers.exceptions import ParserDocumentNotSupportedError
-from ragsdk.document_search.ingestion.parsers.unstructured import UnstructuredDocumentParser
+from ragsdk.document_search.ingestion.parsers.exceptions import (
+    ParserDocumentNotSupportedError,  # type: ignore
+)
+from ragsdk.document_search.ingestion.parsers.unstructured import (
+    UnstructuredDocumentParser,  # type: ignore
+)
 
 
 @pytest.mark.parametrize("document_type", UnstructuredDocumentParser.supported_document_types)

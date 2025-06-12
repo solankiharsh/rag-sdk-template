@@ -1,8 +1,12 @@
 import tempfile
 from pathlib import Path
 
-from ragsdk.core.sources.local import LocalFileSource
-from ragsdk.document_search.documents.document import DocumentMeta, DocumentType, TextDocument
+from ragsdk.core.sources.local import LocalFileSource  # type: ignore
+from ragsdk.document_search.documents.document import (  # type: ignore
+    DocumentMeta,
+    DocumentType,
+    TextDocument,
+)
 
 
 async def test_loading_local_file_source():

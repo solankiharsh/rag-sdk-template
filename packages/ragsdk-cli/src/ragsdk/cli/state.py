@@ -5,11 +5,11 @@ from enum import Enum
 from types import UnionType
 from typing import Optional, TypeVar, Union, get_args, get_origin
 
-import typer
-from pydantic import BaseModel
-from pydantic.fields import FieldInfo
-from rich.console import Console
-from rich.table import Column, Table
+import typer  # type: ignore
+from pydantic import BaseModel  # type: ignore
+from pydantic.fields import FieldInfo  # type: ignore
+from rich.console import Console  # type: ignore
+from rich.table import Column, Table  # type: ignore
 
 
 class OutputType(Enum):
@@ -40,9 +40,10 @@ def print_output_table(
 
     Args:
         data: a list of pydantic models representing output of CLI function
-        columns: a list of columns to display in the output table: either as a list, string with comma separated names,
-            or for grater control over how the data is displayed a mapping of column names to Column objects.
-            If not provided, the columns will be inferred from the model schema.
+        columns: a list of columns to display in the output table: either as a list,
+            string with comma separated names,
+            or for greater control over how the data is displayed a mapping of column names
+            to Column objects. If not provided, the columns will be inferred from the model schema.
     """
     console = Console()
 
@@ -65,7 +66,8 @@ def print_output_table(
         field = _get_nested_field(column_name, base_fields)
         column = columns[column_name]
         if column.header == "":
-            column.header = field.title if field.title else column_name.replace("_", " ").replace(".", " ").title()
+            formatted_name = column_name.replace("_", " ").replace(".", " ").title()
+            column.header = field.title if field.title else formatted_name
 
     # Create and print the table
     table = Table(*columns.values(), show_header=True, header_style="bold magenta")
@@ -128,15 +130,18 @@ def print_output_json(data: Sequence[ModelT]) -> None:
 
 
 def print_output(
-    data: Sequence[ModelT] | ModelT, columns: Mapping[str, Column] | Sequence[str] | str | None = None
+    data: Sequence[ModelT] | ModelT,
+    columns: Mapping[str, Column] | Sequence[str] | str | None = None,
 ) -> None:
     """
     Process and display output based on the current state's output type.
 
     Args:
         data: a list of pydantic models representing output of CLI function
-        columns: a list of columns to display in the output table: either as a list, string with comma separated names,
-            or for grater control over how the data is displayed a mapping of column names to Column objects.
+        columns: a list of columns to display in the output table: either as a list,
+            string with comma separated names,
+            or for greater control over how the data is displayed a mapping of column names
+            to Column objects.
             If not provided, the columns will be inferred from the model schema.
     """
     if not isinstance(data, Sequence):

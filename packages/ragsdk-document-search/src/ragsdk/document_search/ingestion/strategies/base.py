@@ -8,9 +8,9 @@ from dataclasses import dataclass, field
 from types import ModuleType
 from typing import ClassVar, ParamSpec, TypeVar
 
-from ragsdk.core.sources.base import Source
-from ragsdk.core.utils.config_handling import WithConstructionConfig
-from ragsdk.core.vector_stores.base import VectorStore
+from ragsdk.core.sources.base import Source  # type: ignore
+from ragsdk.core.utils.config_handling import WithConstructionConfig  # type: ignore
+from ragsdk.core.vector_stores.base import VectorStore  # type: ignore
 from ragsdk.document_search.documents.document import Document, DocumentMeta
 from ragsdk.document_search.documents.element import Element
 from ragsdk.document_search.ingestion import strategies
