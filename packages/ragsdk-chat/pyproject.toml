@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 authors = [
-    { name = "deepsense.ai", email = "ragsdk@deepsense.ai"}
+    { name = "solankiharsh", email = "hvsolanki27@gmail.com"}
 ]
 keywords = [
     "Retrieval Augmented Generation",

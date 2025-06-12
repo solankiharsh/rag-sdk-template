@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
-from pydantic import BaseModel
+from pydantic import BaseModel  # type: ignore
 
-from ragsdk.core.prompt import Prompt
+from ragsdk.core.prompt import Prompt  # type: ignore
 
 
 class GuardrailVerificationResult(BaseModel):

@@ -1,8 +1,8 @@
 import base64
 
-from openai import AsyncOpenAI
+from openai import AsyncOpenAI  # type: ignore
 
-from ragsdk.core.prompt import Prompt
+from ragsdk.core.prompt import Prompt  # type: ignore
 from ragsdk.guardrails.base import Guardrail, GuardrailVerificationResult
 
 
@@ -34,14 +34,21 @@ class OpenAIModerationGuardrail(Guardrail):
                     [
                         {
                             "type": "image_url",
-                            "image_url": {"url": f"data:image/jpeg;base64,{base64.b64encode(im).decode('utf-8')}"},  # type: ignore
+                            "image_url": {
+                                "url": (
+                                    f"data:image/jpeg;base64,{base64.b64encode(im).decode('utf-8')}"
+                                )
+                            },  # type: ignore
                         }
                         for im in images
                     ]
                 )
         else:
             inputs = [{"type": "text", "text": input_to_verify}]
-        response = await self._openai_client.moderations.create(model=self._moderation_model, input=inputs)  # type: ignore
+        response = await self._openai_client.moderations.create(
+            model=self._moderation_model,
+            input=inputs
+        )  # type: ignore
 
         fail_reasons = [result for result in response.results if result.flagged]
         return GuardrailVerificationResult(
