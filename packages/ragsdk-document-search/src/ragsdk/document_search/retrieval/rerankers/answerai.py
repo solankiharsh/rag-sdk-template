@@ -4,14 +4,15 @@ from typing import Any
 
 from rerankers import Reranker as AnswerReranker
 
-from ragsdk.core.audit.traces import trace
+from ragsdk.core.audit.traces import trace  # type: ignore
 from ragsdk.document_search.documents.element import Element
 from ragsdk.document_search.retrieval.rerankers.base import Reranker, RerankerOptions
 
 
 class AnswerAIReranker(Reranker[RerankerOptions]):
     """
-    A [rerankers](https://github.com/AnswerDotAI/rerankers) re-ranker covering most popular re-ranking methods.
+    A [rerankers](https://github.com/AnswerDotAI/rerankers) re-ranker covering most popular
+    re-ranking methods.
     """
 
     options_cls: type[RerankerOptions] = RerankerOptions
@@ -52,8 +53,10 @@ class AnswerAIReranker(Reranker[RerankerOptions]):
             The reranked elements.
 
         Raises:
-            ValueError: Raised if the input query is empty or if the list of candidate documents is empty.
-            TypeError: Raised if the input types are incorrect, such as if the query is not a string, or List[str].
+            ValueError: Raised if the input query is empty or if the list of candidate
+                documents is empty.
+            TypeError: Raised if the input types are incorrect, such as if the query is not
+                a string, or List[str].
             IndexError: Raised if docs is an empty List.
         """
         merged_options = (self.default_options | options) if options else self.default_options
@@ -61,7 +64,11 @@ class AnswerAIReranker(Reranker[RerankerOptions]):
         documents = [element.text_representation or "" for element in flat_elements]
 
         with trace(
-            query=query, documents=documents, elements=elements, model=self.model, options=merged_options
+            query=query,
+            documents=documents,
+            elements=elements,
+            model=self.model,
+            options=merged_options
         ) as outputs:
             response = self.ranker.rank(
                 query=query,
@@ -72,7 +79,10 @@ class AnswerAIReranker(Reranker[RerankerOptions]):
 
             results = []
             for result in response:
-                if not merged_options.score_threshold or result.score >= merged_options.score_threshold:
+                if (
+                    not merged_options.score_threshold
+                    or result.score >= merged_options.score_threshold
+                ):
                     if merged_options.override_score:
                         flat_elements[result.document.doc_id].score = result.score
                     results.append(flat_elements[result.document.doc_id])

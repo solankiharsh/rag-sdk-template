@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from collections.abc import Iterable
 from typing import ClassVar, TypeVar
 
-from ragsdk.core.options import Options
-from ragsdk.core.utils.config_handling import ConfigurableComponent
+from ragsdk.core.options import Options  # type: ignore
+from ragsdk.core.utils.config_handling import ConfigurableComponent  # type: ignore
 from ragsdk.document_search.retrieval import rephrasers
 
 
@@ -26,7 +26,9 @@ class QueryRephraser(ConfigurableComponent[QueryRephraserOptionsT], ABC):
     configuration_key: ClassVar = "rephraser"
 
     @abstractmethod
-    async def rephrase(self, query: str, options: QueryRephraserOptionsT | None = None) -> Iterable[str]:
+    async def rephrase(
+        self, query: str, options: QueryRephraserOptionsT | None = None
+    ) -> Iterable[str]:
         """
         Rephrase a query.
 
